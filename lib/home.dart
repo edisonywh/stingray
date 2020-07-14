@@ -53,7 +53,7 @@ class _HomeState extends State<Home> {
                         item.title,
                       ),
                       subtitle: Text(
-                        "${item.kids.length.toString()} comments",
+                        "${item.descendants.toString()} comments",
                       ),
                     );
                   },
