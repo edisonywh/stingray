@@ -1,23 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stingray/model/story.dart';
+import 'package:stingray/repo.dart';
 
-final counterProvider = StateProvider((ref) => 0);
+final FutureProvider topStories = FutureProvider((ref) async {
+  return await Repo.getTopStories();
+});
 
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => counterProvider.read(context).state++,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
       body: Consumer(
         (context, read) {
-          return Center(
-            child: Text(
-              'You have pushed the button this many times: ${read(counterProvider).state}',
-            ),
+          return read(topStories).when(
+            loading: () => Center(child: const CircularProgressIndicator()),
+            error: (err, stack) => Text('Error: $err'),
+            data: (stories) {
+              return ListView.builder(
+                itemCount: stories.length,
+                itemBuilder: (context, index) {
+                  Story story = stories[index];
+                  return ListTile(
+                    title: Text(
+                      story.title,
+                    ),
+                    subtitle: Text(
+                      "${story.formattedTime()} - ${story.by}",
+                    ),
+                  );
+                },
+              );
+            },
           );
         },
       ),
