@@ -37,7 +37,7 @@ class _HomeState extends State<Home> {
         (context, read) {
           return read(topStories).when(
             loading: () => Center(child: const CircularProgressIndicator()),
-            error: (err, stack) => Text('Error: $err'),
+            error: (err, stack) => Center(child: Text('Error: $err')),
             data: (items) {
               return NotificationListener(
                 onNotification: _handleScrollNotification,
