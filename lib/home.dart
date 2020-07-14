@@ -7,7 +7,29 @@ final FutureProvider topStories = FutureProvider((ref) async {
   return await Repo.getTopStories();
 });
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  ScrollController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = new ScrollController();
+  }
+
+  bool _handleScrollNotification(ScrollNotification notification) {
+    if (notification is ScrollEndNotification) {
+      if (_controller.position.extentAfter <= 500) {
+        print("Fetching..");
+      }
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,19 +39,24 @@ class Home extends StatelessWidget {
             loading: () => Center(child: const CircularProgressIndicator()),
             error: (err, stack) => Text('Error: $err'),
             data: (stories) {
-              return ListView.builder(
-                itemCount: stories.length,
-                itemBuilder: (context, index) {
-                  Story story = stories[index];
-                  return ListTile(
-                    title: Text(
-                      story.title,
-                    ),
-                    subtitle: Text(
-                      "${story.formattedTime()} - ${story.by}",
-                    ),
-                  );
-                },
+              return NotificationListener(
+                onNotification: _handleScrollNotification,
+                child: ListView.builder(
+                  controller: _controller,
+                  itemCount: stories.length,
+                  itemBuilder: (context, index) {
+                    Story story = stories[index];
+                    return ListTile(
+                      onTap: () {},
+                      title: Text(
+                        story.title,
+                      ),
+                      subtitle: Text(
+                        "${story.kids.length.toString()} comments",
+                      ),
+                    );
+                  },
+                ),
               );
             },
           );
