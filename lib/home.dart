@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:stingray/component/item_card.dart';
 import 'package:stingray/model/item.dart';
 import 'package:stingray/repo.dart';
 
@@ -23,7 +26,7 @@ class _HomeState extends State<Home> {
 
   bool _handleScrollNotification(ScrollNotification notification) {
     if (notification is ScrollEndNotification) {
-      if (_controller.position.extentAfter <= 500) {
+      if (_controller.position.extentAfter <= 100) {
         print("Fetching..");
       }
     }
@@ -46,14 +49,28 @@ class _HomeState extends State<Home> {
                   itemCount: items.length,
                   itemBuilder: (context, index) {
                     Item item = items[index];
-                    return ListTile(
+                    return Slidable(
                       key: Key(item.id.toString()),
-                      onTap: () {},
-                      title: Text(
-                        item.title,
+                      actionPane: SlidableScrollActionPane(),
+                      actions: <Widget>[
+                        IconSlideAction(
+                          color: Colors.deepOrangeAccent,
+                          icon: Feather.arrow_up_circle,
+                          onTap: () => _handleUpvote(),
+                        ),
+                      ],
+                      dismissal: SlidableDismissal(
+                        closeOnCanceled: true,
+                        child: SlidableDrawerDismissal(),
+                        onWillDismiss: (actionType) {
+                          _handleUpvote();
+                          return false;
+                        },
                       ),
-                      subtitle: Text(
-                        "${item.descendants.toString()} comments",
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 2),
+                        child: ItemCard(item: item),
                       ),
                     );
                   },
@@ -65,4 +82,9 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+}
+
+_handleUpvote() {
+  print("Handle upvote here");
+  return false;
 }

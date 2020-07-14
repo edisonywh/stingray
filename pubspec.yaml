@@ -1,5 +1,5 @@
 name: stingray
-description: A new Flutter project.
+description: A beautiful, modern Hacker News reader app.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -25,6 +25,9 @@ dependencies:
     sdk: flutter
   flutter_riverpod: ^0.5.1
   http: ^0.12.0+2
+  cupertino_icons: ^0.1.2
+  flutter_icons: ^1.0.0
+  flutter_slidable: ^0.5.4
 
 dev_dependencies:
   flutter_test:
@@ -35,6 +38,7 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
+  uses-material-design: true
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

@@ -31,7 +31,7 @@ class Repo {
 
     if (response.statusCode == 200) {
       List<int> itemIds = List<int>.from(jsonDecode(response.body));
-      return Future.value(itemIds);
+      return itemIds;
     } else {
       throw HackerNewsApiError('Stories for $typeQuery failed to fetch.');
     }
@@ -41,6 +41,8 @@ class Repo {
     if (_itemsCache.containsKey(id)) {
       return _itemsCache[id];
     } else {
+      // For some weird reason, sometimes the API returns "null".
+      // e.g: "https://hacker-news.firebaseio.com/v0/item/23829504.json"
       String url = "$baseUrl/item/$id.json";
       final response = await http.get(url);
 
