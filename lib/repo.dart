@@ -27,7 +27,13 @@ class Repo {
     if (response.statusCode == 200) {
       return Future.value(Item.fromJson(response.body));
     } else {
-      throw Exception("Unable to fetch data!");
+      throw HackerNewsApiError('Article $id failed to fetch.');
     }
   }
+}
+
+class HackerNewsApiError extends Error {
+  final String message;
+
+  HackerNewsApiError(this.message);
 }
