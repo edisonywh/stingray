@@ -10,6 +10,8 @@ enum StoriesType {
 }
 
 class Repo {
+  static final _itemsCache = <int, Item>{};
+
   static const baseUrl = "https://hacker-news.firebaseio.com/v0";
 
   static Future<List<Item>> getTopStories() async {
@@ -35,14 +37,18 @@ class Repo {
     }
   }
 
-  static Future<Item> _getItem(id) async {
-    String url = "$baseUrl/item/$id.json";
-    final response = await http.get(url);
-
-    if (response.statusCode == 200) {
-      return Future.value(Item.fromJson(response.body));
+  static Future<Item> _getItem(int id) async {
+    if (_itemsCache.containsKey(id)) {
+      return _itemsCache[id];
     } else {
-      throw HackerNewsApiError('Article $id failed to fetch.');
+      String url = "$baseUrl/item/$id.json";
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        return _itemsCache[id] = Item.fromJson(response.body);
+      } else {
+        throw HackerNewsApiError('Article $id failed to fetch.');
+      }
     }
   }
 
