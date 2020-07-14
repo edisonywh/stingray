@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stingray/model/story.dart';
+import 'package:stingray/model/item.dart';
 import 'package:stingray/repo.dart';
 
 final FutureProvider topStories = FutureProvider((ref) async {
@@ -38,21 +38,22 @@ class _HomeState extends State<Home> {
           return read(topStories).when(
             loading: () => Center(child: const CircularProgressIndicator()),
             error: (err, stack) => Text('Error: $err'),
-            data: (stories) {
+            data: (items) {
               return NotificationListener(
                 onNotification: _handleScrollNotification,
                 child: ListView.builder(
                   controller: _controller,
-                  itemCount: stories.length,
+                  itemCount: items.length,
                   itemBuilder: (context, index) {
-                    Story story = stories[index];
+                    Item item = items[index];
                     return ListTile(
+                      key: Key(item.id.toString()),
                       onTap: () {},
                       title: Text(
-                        story.title,
+                        item.title,
                       ),
                       subtitle: Text(
-                        "${story.kids.length.toString()} comments",
+                        "${item.kids.length.toString()} comments",
                       ),
                     );
                   },

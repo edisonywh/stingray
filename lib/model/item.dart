@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-class Story {
-  Story({
+class Item {
+  Item({
     this.by,
     this.descendants,
     this.id,
@@ -23,7 +23,7 @@ class Story {
   String type;
   String url;
 
-  factory Story.fromJson(String str) => Story.fromMap(json.decode(str));
+  factory Item.fromJson(String str) => Item.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
@@ -33,12 +33,12 @@ class Story {
     return "${date.day}/${date.month}/${date.year}";
   }
 
-  factory Story.fromMap(Map<String, dynamic> json) => Story(
+  factory Item.fromMap(Map<String, dynamic> json) => Item(
         id: json["id"],
         by: json["by"] == null ? null : json["by"],
         descendants: json["descendants"] == null ? null : json["descendants"],
         kids: json["kids"] == null
-            ? null
+            ? []
             : List<int>.from(json["kids"].map((x) => x)),
         score: json["score"] == null ? null : json["score"],
         time: json["time"] == null ? null : json["time"],
