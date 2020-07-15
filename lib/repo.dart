@@ -17,7 +17,7 @@ class Repo {
   static Future<List<Item>> getTopStories() async {
     Iterable itemIds = await _getIds(StoriesType.topStories);
 
-    return Future.wait(itemIds.take(10).map((itemId) {
+    return Future.wait(itemIds.take(50).map((itemId) {
       return _getItem(itemId);
     }));
   }

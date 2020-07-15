@@ -39,6 +39,8 @@ class Item {
 
   String toJson() => json.encode(toMap());
 
+  String get domain => Uri.parse(url).host;
+
   factory Item.fromMap(Map<String, dynamic> json) => Item(
         id: json["id"],
         by: json["by"] == null ? null : json["by"],
