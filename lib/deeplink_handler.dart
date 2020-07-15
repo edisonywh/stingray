@@ -21,7 +21,7 @@ class DeeplinkHandler {
     _sub = getUriLinksStream().listen((Uri uri) async {
       try {
         if (uri != null) {
-          launchStoryPage(context, uri);
+          launchDeeplink(context, uri);
         }
       } on FormatException {}
     }, onError: (err) {
@@ -31,9 +31,7 @@ class DeeplinkHandler {
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       Uri uri = await getInitialUri();
-      if (uri != null) {
-        launchStoryPage(context, uri);
-      }
+      if (uri != null) launchDeeplink(context, uri);
     } on PlatformException {
       print('[PlatformException] Failed to get initial link.');
     } on FormatException {
@@ -44,12 +42,23 @@ class DeeplinkHandler {
   }
 }
 
-void launchStoryPage(BuildContext context, Uri uri) async {
-  String id = uri.queryParametersAll["id"][0];
-
+void launchDeeplink(BuildContext context, Uri uri) async {
+  String id = uri.queryParametersAll["id"] == null
+      ? null
+      : uri.queryParametersAll["id"][0];
+  if (id == null) return;
   Item item = await Repo.fetchItem(int.parse(id));
-  Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => StoryPage(item: item)),
-  );
+
+  // TODO: A better UI for handling different types of Story, especially Comment.
+  if (item.type == StoryType.story ||
+      item.type == StoryType.job ||
+      item.type == StoryType.poll ||
+      item.type == StoryType.comment) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => StoryPage(item: item)),
+    );
+  } else {
+    print("Type ${item.type} not handled");
+  }
 }

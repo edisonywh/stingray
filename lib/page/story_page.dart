@@ -3,13 +3,19 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:html_unescape/html_unescape_small.dart';
 import 'package:stingray/component/comment_tile.dart';
+import 'package:stingray/component/part_snippet.dart';
 import 'package:stingray/helpers.dart';
 import 'package:stingray/model/item.dart';
 import 'package:stingray/repo.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final commentsProvider = FutureProvider.family((ref, int parameter) async {
+  return await Repo.fetchItem(parameter);
+});
+
+final partsProvider = FutureProvider.family((ref, int parameter) async {
   return await Repo.fetchItem(parameter);
 });
 
@@ -33,10 +39,27 @@ class StoryPage extends HookWidget {
   Widget build(BuildContext context) {
     final comments =
         item.kids.map((i) => useProvider(commentsProvider(i))).toList();
+    final parts = item.parts.map((i) => useProvider(partsProvider(i))).toList();
+    var anim = useAnimationController(duration: Duration(seconds: 2));
+    anim.forward();
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Stingray'),
+        actions: [
+          if (item.parent != null)
+            IconButton(
+              icon: Icon(Feather.corner_left_up),
+              onPressed: () async {
+                Item parent = await Repo.fetchItem(item.parent);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => StoryPage(item: parent)),
+                );
+              },
+            ),
+        ],
       ),
       body: CustomScrollView(
         slivers: [
@@ -68,12 +91,9 @@ class StoryPage extends HookWidget {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Text(
-                            item.domain,
-                            style: Theme.of(context).textTheme.caption,
-                          ),
+                        Text(
+                          item.domain,
+                          style: Theme.of(context).textTheme.caption,
                         ),
                         RichText(
                           text: TextSpan(
@@ -106,6 +126,25 @@ class StoryPage extends HookWidget {
                             ],
                           ),
                         ),
+                        if (item.text != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16.0),
+                            child: Text(
+                              HtmlUnescape().convert(item.text),
+                            ),
+                          ),
+                        if (item.parts != [])
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: item.parts.length,
+                              itemBuilder: (context, index) {
+                                return PartSnippet(part: parts[index]);
+                              },
+                            ),
+                          ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: Row(
@@ -181,8 +220,10 @@ class StoryPage extends HookWidget {
                   color: Theme.of(context).scaffoldBackgroundColor,
                   margin: EdgeInsets.zero,
                   child: Padding(
-                    padding: const EdgeInsets.all(
-                      8.0,
+                    padding: const EdgeInsets.only(
+                      left: 8.0,
+                      bottom: 8.0,
+                      right: 8.0,
                     ),
                     child: ListView.builder(
                       shrinkWrap: true,
@@ -197,25 +238,45 @@ class StoryPage extends HookWidget {
                     ),
                   ),
                 ),
-                Container(
-                  width: double.infinity,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 80),
-                    child: Column(
-                      children: [
-                        Icon(
-                          Feather.anchor,
-                          size: 50,
-                          color: Theme.of(context).textTheme.caption.color,
-                        ),
-                        Text(
-                          "This is the end!",
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme.caption.color,
-                            fontSize: 20,
+                InkWell(
+                  onTap: () =>
+                      anim.isCompleted ? anim.reverse() : anim.forward(),
+                  child: Container(
+                    width: double.infinity,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 80),
+                      child: Column(
+                        children: [
+                          AnimatedBuilder(
+                            animation: anim,
+                            builder: (buildContext, child) {
+                              return Container(
+                                margin: EdgeInsets.symmetric(horizontal: 24.0),
+                                padding: EdgeInsets.only(
+                                    left: anim.value + 24.0,
+                                    right: 24.0 - anim.value),
+                                child: Icon(
+                                  Feather.anchor,
+                                  size: 50,
+                                  color:
+                                      Theme.of(context).textTheme.caption.color,
+                                ),
+                              );
+                            },
                           ),
-                        ),
-                      ],
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Text(
+                              "This is the end!",
+                              style: TextStyle(
+                                color:
+                                    Theme.of(context).textTheme.caption.color,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

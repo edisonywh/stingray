@@ -3,12 +3,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:stingray/model/item.dart';
 
-enum StoriesType {
-  topStories,
-  newStories,
-  bestStories,
-}
-
 class Repo {
   static final _itemsCache = <int, Item>{};
 

@@ -1,6 +1,20 @@
 import 'dart:convert';
 import 'package:timeago/timeago.dart' as timeago;
 
+enum StoryType {
+  job,
+  story,
+  comment,
+  poll,
+  pollopt,
+}
+
+enum StoriesType {
+  topStories,
+  newStories,
+  bestStories,
+}
+
 class Item {
   Item({
     this.by,
@@ -33,7 +47,7 @@ class Item {
   int score;
   int time;
   String title;
-  String type;
+  StoryType type;
   String url;
 
   factory Item.fromJson(String str) => Item.fromMap(json.decode(str));
@@ -49,7 +63,7 @@ class Item {
         by: json["by"] == null ? "" : json["by"],
         deleted: json["deleted"] == null ? false : json["deleted"],
         text: json["text"] == null ? "" : json["text"],
-        dead: json["dead"] == null ? null : json["dead"],
+        dead: json["dead"] == null ? false : json["dead"],
         poll: json["poll"] == null ? null : json["poll"],
         parent: json["parent"] == null ? null : json["parent"],
         parts: json["parts"] == null
@@ -59,10 +73,10 @@ class Item {
         kids: json["kids"] == null
             ? []
             : List<int>.from(json["kids"].map((x) => x)),
-        score: json["score"] == null ? null : json["score"],
-        time: json["time"] == null ? null : json["time"],
-        title: json["title"] == null ? null : json["title"],
-        type: json["type"] == null ? null : json["type"],
+        score: json["score"] == null ? 0 : json["score"],
+        time: json["time"] == null ? 0 : json["time"],
+        title: json["title"] == null ? "" : json["title"],
+        type: json["type"] == null ? null : castType(json["type"]),
         url: json["url"] == null ? "" : json["url"],
       );
 
@@ -83,4 +97,27 @@ class Item {
         "type": type == null ? null : type,
         "url": url == null ? null : url,
       };
+
+  static StoryType castType(String type) {
+    switch (type) {
+      case "job":
+        return StoryType.job;
+        break;
+      case "story":
+        return StoryType.story;
+        break;
+      case "comment":
+        return StoryType.comment;
+        break;
+      case "poll":
+        return StoryType.poll;
+        break;
+      case "pollopt":
+        return StoryType.pollopt;
+        break;
+      default:
+        return null;
+        break;
+    }
+  }
 }
