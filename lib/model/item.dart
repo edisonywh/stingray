@@ -46,8 +46,8 @@ class Item {
 
   factory Item.fromMap(Map<String, dynamic> json) => Item(
         id: json["id"],
-        by: json["by"] == null ? "?" : json["by"],
-        deleted: json["deleted"] == null ? null : json["deleted"],
+        by: json["by"] == null ? "" : json["by"],
+        deleted: json["deleted"] == null ? false : json["deleted"],
         text: json["text"] == null ? "" : json["text"],
         dead: json["dead"] == null ? null : json["dead"],
         poll: json["poll"] == null ? null : json["poll"],

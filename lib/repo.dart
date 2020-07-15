@@ -17,8 +17,12 @@ class Repo {
   static Future<List<Item>> getTopStories() async {
     Iterable itemIds = await _getIds(StoriesType.topStories);
 
-    return Future.wait(itemIds.take(50).map((itemId) {
-      return _getItem(itemId);
+    return fetchByIds(itemIds);
+  }
+
+  static Future<List<Item>> fetchByIds(List<int> ids) async {
+    return Future.wait(ids.take(50).map((itemId) {
+      return fetchItem(itemId);
     }));
   }
 
@@ -37,7 +41,7 @@ class Repo {
     }
   }
 
-  static Future<Item> _getItem(int id) async {
+  static Future<Item> fetchItem(int id) async {
     if (_itemsCache.containsKey(id)) {
       return _itemsCache[id];
     } else {
@@ -49,7 +53,7 @@ class Repo {
       if (response.statusCode == 200) {
         return _itemsCache[id] = Item.fromJson(response.body);
       } else {
-        throw HackerNewsApiError('Article $id failed to fetch.');
+        throw HackerNewsApiError('Item $id failed to fetch.');
       }
     }
   }

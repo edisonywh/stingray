@@ -37,6 +37,11 @@ class _HomeState extends State<Home> {
     return false;
   }
 
+  _handleUpvote() {
+    print("Handle upvote here");
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,10 +115,5 @@ class _HomeState extends State<Home> {
         },
       ),
     );
-  }
-
-  _handleUpvote() {
-    print("Handle upvote here");
-    return false;
   }
 }
