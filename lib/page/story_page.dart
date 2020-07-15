@@ -7,6 +7,7 @@ import 'package:stingray/component/comment_tile.dart';
 import 'package:stingray/helpers.dart';
 import 'package:stingray/model/item.dart';
 import 'package:stingray/repo.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final commentsProvider = FutureProvider.family((ref, int parameter) async {
   return await Repo.fetchItem(parameter);
@@ -19,6 +20,14 @@ class StoryPage extends HookWidget {
   }) : super(key: key);
 
   final Item item;
+
+  void launchUrl(url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +54,19 @@ class StoryPage extends HookWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Text(
-                          item.title,
-                          style: Theme.of(context).textTheme.headline5.copyWith(
-                                fontWeight: FontWeight.w600,
-                              ),
+                        InkWell(
+                          onTap: () => launchUrl(item.url),
+                          child: Container(
+                            child: Text(
+                              item.title,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline5
+                                  .copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                            ),
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),

@@ -36,6 +36,7 @@ dependencies:
   expandable: ^4.1.4
   share: ^0.6.4+3
   shimmer: ^1.1.1
+  url_launcher: ^5.5.0
 
 dev_dependencies:
   flutter_test:
