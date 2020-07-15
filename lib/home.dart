@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +7,7 @@ import 'package:stingray/component/compact_tile.dart';
 import 'package:stingray/component/item_card.dart';
 import 'package:stingray/component/item_tile.dart';
 import 'package:stingray/model/item.dart';
+import 'package:stingray/page/story_page.dart';
 import 'package:stingray/repo.dart';
 
 final FutureProvider topStories = FutureProvider((ref) async {
@@ -77,12 +79,28 @@ class _HomeState extends State<Home> {
                         },
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 2),
-                        // child: ItemCard(item: item),
-                        // child: ItemTile(item: item),
-                        child: CompactTile(item: item),
-                      ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 2),
+                          child: OpenContainer(
+                            tappable: true,
+                            closedElevation: 0,
+                            closedColor:
+                                Theme.of(context).scaffoldBackgroundColor,
+                            openColor:
+                                Theme.of(context).scaffoldBackgroundColor,
+                            transitionDuration: Duration(milliseconds: 500),
+                            closedBuilder:
+                                (BuildContext c, VoidCallback action) =>
+                                    CompactTile(item: item),
+                            openBuilder:
+                                (BuildContext c, VoidCallback action) =>
+                                    StoryPage(item: item),
+                          )
+
+                          // child: ItemCard(item: item),
+                          // child: ItemTile(item: item),
+                          // child: CompactTile(item: item),
+                          ),
                     );
                   },
                 ),
@@ -93,9 +111,9 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-}
 
-_handleUpvote() {
-  print("Handle upvote here");
-  return false;
+  _handleUpvote() {
+    print("Handle upvote here");
+    return false;
+  }
 }
