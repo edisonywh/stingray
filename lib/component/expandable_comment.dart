@@ -96,10 +96,6 @@ class ExpandableComment extends StatelessWidget {
                               text: " ${String.fromCharCode(8226)} ",
                               style: Theme.of(context).textTheme.caption,
                             ),
-                            TextSpan(
-                              text: " ${String.fromCharCode(8226)} ",
-                              style: Theme.of(context).textTheme.caption,
-                            ),
                             item.deleted
                                 ? TextSpan(
                                     text: "<deleted>",
