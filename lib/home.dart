@@ -4,6 +4,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:stingray/component/item_card.dart';
+import 'package:stingray/component/loading_stories.dart';
 import 'package:stingray/deeplink_handler.dart';
 import 'package:stingray/helpers.dart';
 import 'package:stingray/model/item.dart';
@@ -53,77 +54,83 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Consumer(
-        (context, read) {
-          return read(topStories).when(
-            loading: () => Center(child: const CircularProgressIndicator()),
-            error: (err, stack) => Center(child: Text('Error: $err')),
-            data: (items) {
-              return NotificationListener(
-                onNotification: _handleScrollNotification,
-                child: ListView.builder(
-                  controller: _controller,
-                  itemCount: items.length,
-                  itemBuilder: (context, index) {
-                    Item item = items[index];
-                    return Slidable(
-                      key: Key(item.id.toString()),
-                      actionPane: SlidableScrollActionPane(),
-                      actions: <Widget>[
-                        IconSlideAction(
-                          color: Colors.deepOrangeAccent,
-                          icon: Feather.arrow_up_circle,
-                          onTap: () => _handleUpvote(),
+      body: SafeArea(
+        child: Consumer(
+          (context, read) {
+            return read(topStories).when(
+              loading: () {
+                return LoadingStories();
+              },
+              error: (err, stack) => Center(child: Text('Error: $err')),
+              data: (items) {
+                return NotificationListener(
+                  onNotification: _handleScrollNotification,
+                  child: ListView.builder(
+                    controller: _controller,
+                    itemCount: items.length,
+                    itemBuilder: (context, index) {
+                      Item item = items[index];
+                      return Slidable(
+                        key: Key(item.id.toString()),
+                        actionPane: SlidableScrollActionPane(),
+                        actions: <Widget>[
+                          IconSlideAction(
+                            color: Colors.deepOrangeAccent,
+                            icon: Feather.arrow_up_circle,
+                            onTap: () => _handleUpvote(),
+                          ),
+                        ],
+                        secondaryActions: [
+                          IconSlideAction(
+                            color: Colors.blue,
+                            icon: Feather.share_2,
+                            onTap: () => handleShare(item.id),
+                          ),
+                        ],
+                        dismissal: SlidableDismissal(
+                          dismissThresholds: {
+                            SlideActionType.primary: 0.2,
+                            SlideActionType.secondary: 0.2,
+                          },
+                          closeOnCanceled: true,
+                          child: SlidableDrawerDismissal(),
+                          onWillDismiss: (actionType) {
+                            actionType == SlideActionType.primary
+                                ? _handleUpvote()
+                                : handleShare(item.id);
+                            return false;
+                          },
                         ),
-                      ],
-                      secondaryActions: [
-                        IconSlideAction(
-                          color: Colors.blue,
-                          icon: Feather.share_2,
-                          onTap: () => handleShare(item.id),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 2),
+                          child: OpenContainer(
+                            tappable: true,
+                            closedElevation: 0,
+                            closedColor:
+                                Theme.of(context).scaffoldBackgroundColor,
+                            openColor:
+                                Theme.of(context).scaffoldBackgroundColor,
+                            transitionDuration: Duration(milliseconds: 500),
+                            closedBuilder:
+                                (BuildContext c, VoidCallback action) =>
+                                    // CompactTile(item: item),
+                                    // ItemTile(item: item),
+                                    // CompactTile(item: item),
+                                    ItemCard(item: item),
+                            openBuilder:
+                                (BuildContext c, VoidCallback action) =>
+                                    StoryPage(item: item),
+                          ),
                         ),
-                      ],
-                      dismissal: SlidableDismissal(
-                        dismissThresholds: {
-                          SlideActionType.primary: 0.2,
-                          SlideActionType.secondary: 0.2,
-                        },
-                        closeOnCanceled: true,
-                        child: SlidableDrawerDismissal(),
-                        onWillDismiss: (actionType) {
-                          actionType == SlideActionType.primary
-                              ? _handleUpvote()
-                              : handleShare(item.id);
-                          return false;
-                        },
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 2),
-                        child: OpenContainer(
-                          tappable: true,
-                          closedElevation: 0,
-                          closedColor:
-                              Theme.of(context).scaffoldBackgroundColor,
-                          openColor: Theme.of(context).scaffoldBackgroundColor,
-                          transitionDuration: Duration(milliseconds: 500),
-                          closedBuilder:
-                              (BuildContext c, VoidCallback action) =>
-                                  // CompactTile(item: item),
-                                  // ItemTile(item: item),
-                                  // CompactTile(item: item),
-                                  ItemCard(item: item),
-                          openBuilder: (BuildContext c, VoidCallback action) =>
-                              StoryPage(item: item),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              );
-            },
-          );
-        },
+                      );
+                    },
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

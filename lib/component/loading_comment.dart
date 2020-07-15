@@ -9,7 +9,7 @@ class LoadingComment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: Colors.grey[300],
+      baseColor: Colors.grey[500],
       highlightColor: Colors.grey[100],
       child: Padding(
         padding: const EdgeInsets.all(16.0),

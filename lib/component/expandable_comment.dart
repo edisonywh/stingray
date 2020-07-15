@@ -60,7 +60,7 @@ class ExpandableComment extends StatelessWidget {
         closeOnCanceled: true,
         child: SlidableDrawerDismissal(),
         onWillDismiss: (actionType) {
-          actionType == SlideActionType.primary ? null : handleShare(item.id);
+          if (actionType == SlideActionType.secondary) handleShare(item.id);
           return false;
         },
       ),
