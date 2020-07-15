@@ -124,7 +124,7 @@ class StoryPage extends HookWidget {
                             ],
                           ),
                         ),
-                        if (item.text != null)
+                        if (item.text != "")
                           Padding(
                             padding: const EdgeInsets.only(top: 16.0),
                             child: Text(
