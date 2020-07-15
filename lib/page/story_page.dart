@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stingray/component/comment_tile.dart';
@@ -108,6 +109,28 @@ class StoryPage extends HookWidget {
                           depth: 0,
                         );
                       },
+                    ),
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 80),
+                    child: Column(
+                      children: [
+                        Icon(
+                          Feather.anchor,
+                          size: 50,
+                          color: Theme.of(context).textTheme.caption.color,
+                        ),
+                        Text(
+                          "This is the end!",
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.caption.color,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

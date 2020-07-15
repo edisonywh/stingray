@@ -76,6 +76,10 @@ class _HomeState extends State<Home> {
                         ),
                       ],
                       dismissal: SlidableDismissal(
+                        dismissThresholds: {
+                          SlideActionType.primary: 0.2,
+                          SlideActionType.secondary: 0.2,
+                        },
                         closeOnCanceled: true,
                         child: SlidableDrawerDismissal(),
                         onWillDismiss: (actionType) {
