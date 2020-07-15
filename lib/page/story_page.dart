@@ -4,6 +4,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stingray/component/comment_tile.dart';
+import 'package:stingray/helpers.dart';
 import 'package:stingray/model/item.dart';
 import 'package:stingray/repo.dart';
 
@@ -84,6 +85,73 @@ class StoryPage extends HookWidget {
                                     .copyWith(
                                       color: Theme.of(context).primaryColor,
                                     ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 16.0),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Feather.arrow_up,
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 8.0),
+                                          child: Text(
+                                            item.score.toString(),
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .caption
+                                                .copyWith(
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 16.0),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Feather.message_square,
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 8.0),
+                                          child: Text(
+                                            item.descendants.toString(),
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .caption
+                                                .copyWith(
+                                                  color: Colors.white,
+                                                ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  Feather.share_2,
+                                ),
+                                onPressed: () => handleShare(item.id),
                               ),
                             ],
                           ),
