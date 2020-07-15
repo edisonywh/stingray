@@ -45,9 +45,10 @@ class ItemTile extends StatelessWidget {
                             child: Text(
                               item.score.toString(),
                               textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 12,
-                              ),
+                              style:
+                                  Theme.of(context).textTheme.caption.copyWith(
+                                        color: Theme.of(context).primaryColor,
+                                      ),
                             ),
                           ),
                         ],
@@ -66,9 +67,10 @@ class ItemTile extends StatelessWidget {
                             child: Text(
                               item.descendants.toString(),
                               textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 12,
-                              ),
+                              style:
+                                  Theme.of(context).textTheme.caption.copyWith(
+                                        color: Colors.white,
+                                      ),
                             ),
                           ),
                         ],
@@ -85,11 +87,12 @@ class ItemTile extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(left: 8.0),
                             child: Text(
-                              "6 hour",
+                              item.ago,
                               textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 12,
-                              ),
+                              style:
+                                  Theme.of(context).textTheme.caption.copyWith(
+                                        color: Colors.white,
+                                      ),
                             ),
                           ),
                         ],

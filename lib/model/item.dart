@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:timeago/timeago.dart' as timeago;
 
 class Item {
   Item({
@@ -39,20 +40,22 @@ class Item {
 
   String toJson() => json.encode(toMap());
 
-  String get domain => Uri.parse(url).host;
+  String get domain => Uri.parse(url)?.host;
+  String get ago =>
+      timeago.format(DateTime.fromMillisecondsSinceEpoch(time * 1000));
 
   factory Item.fromMap(Map<String, dynamic> json) => Item(
         id: json["id"],
-        by: json["by"] == null ? null : json["by"],
+        by: json["by"] == null ? "?" : json["by"],
         deleted: json["deleted"] == null ? null : json["deleted"],
-        text: json["text"] == null ? null : json["text"],
+        text: json["text"] == null ? "" : json["text"],
         dead: json["dead"] == null ? null : json["dead"],
         poll: json["poll"] == null ? null : json["poll"],
         parent: json["parent"] == null ? null : json["parent"],
         parts: json["parts"] == null
             ? []
             : List<int>.from(json["parts"].map((x) => x)),
-        descendants: json["descendants"] == null ? null : json["descendants"],
+        descendants: json["descendants"] == null ? 0 : json["descendants"],
         kids: json["kids"] == null
             ? []
             : List<int>.from(json["kids"].map((x) => x)),
@@ -60,7 +63,7 @@ class Item {
         time: json["time"] == null ? null : json["time"],
         title: json["title"] == null ? null : json["title"],
         type: json["type"] == null ? null : json["type"],
-        url: json["url"] == null ? null : json["url"],
+        url: json["url"] == null ? "" : json["url"],
       );
 
   Map<String, dynamic> toMap() => {

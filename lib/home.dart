@@ -61,6 +61,13 @@ class _HomeState extends State<Home> {
                           onTap: () => _handleUpvote(),
                         ),
                       ],
+                      secondaryActions: [
+                        IconSlideAction(
+                          color: Colors.blue,
+                          icon: Feather.share_2,
+                          onTap: () => {},
+                        ),
+                      ],
                       dismissal: SlidableDismissal(
                         closeOnCanceled: true,
                         child: SlidableDrawerDismissal(),

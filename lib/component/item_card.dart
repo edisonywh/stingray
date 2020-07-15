@@ -20,8 +20,12 @@ class ItemCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text(
+                item.domain,
+                style: Theme.of(context).textTheme.caption,
+              ),
               Padding(
-                padding: const EdgeInsets.only(bottom: 16.0),
+                padding: const EdgeInsets.only(top: 8, bottom: 16.0),
                 child: Text(
                   item.title,
                   style: TextStyle(
@@ -47,9 +51,12 @@ class ItemCard extends StatelessWidget {
                               child: Text(
                                 item.score.toString(),
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .caption
+                                    .copyWith(
+                                      color: Theme.of(context).primaryColor,
+                                    ),
                               ),
                             ),
                           ],
@@ -68,9 +75,12 @@ class ItemCard extends StatelessWidget {
                               child: Text(
                                 item.descendants.toString(),
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .caption
+                                    .copyWith(
+                                      color: Colors.white,
+                                    ),
                               ),
                             ),
                           ],
@@ -87,11 +97,14 @@ class ItemCard extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(left: 8.0),
                               child: Text(
-                                "6 hour",
+                                item.ago,
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .caption
+                                    .copyWith(
+                                      color: Colors.white,
+                                    ),
                               ),
                             ),
                           ],
