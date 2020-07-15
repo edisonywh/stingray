@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:html_unescape/html_unescape_small.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:stingray/model/item.dart';
 import 'package:stingray/page/story_page.dart';
 
@@ -39,16 +40,10 @@ class CommentTile extends HookWidget {
 
     return comment.when(
       loading: () => Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Container(
-          height: 150,
-          child: Center(
-            child: SpinKitThreeBounce(
-              size: 20,
-              color: Theme.of(context).accentColor,
-            ),
-          ),
+        padding: const EdgeInsets.only(
+          left: 4,
         ),
+        child: LoadingComment(),
       ),
       error: (err, stack) => Center(child: Text('Error: $err')),
       data: (item) {
@@ -60,6 +55,7 @@ class CommentTile extends HookWidget {
             bottom: depth == 0 ? 16 : 6,
           ),
           child: ExpandableNotifier(
+            key: Key(item.id.toString()),
             initialExpanded: true,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,6 +105,48 @@ class CommentTile extends HookWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class LoadingComment extends StatelessWidget {
+  const LoadingComment({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300],
+      highlightColor: Colors.grey[100],
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Container(width: 80, height: 10, color: Colors.white24),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Container(height: 10, color: Colors.white24),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Container(height: 10, color: Colors.white24),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Container(height: 10, color: Colors.white24),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Container(height: 10, color: Colors.white24),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
