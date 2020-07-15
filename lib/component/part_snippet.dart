@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:stingray/component/loading_comment.dart';
 import 'package:stingray/model/item.dart';
 
 class PartSnippet extends StatelessWidget {

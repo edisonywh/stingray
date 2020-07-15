@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -40,8 +42,6 @@ class StoryPage extends HookWidget {
     final comments =
         item.kids.map((i) => useProvider(commentsProvider(i))).toList();
     final parts = item.parts.map((i) => useProvider(partsProvider(i))).toList();
-    var anim = useAnimationController(duration: Duration(seconds: 2));
-    anim.forward();
 
     return Scaffold(
       appBar: AppBar(
@@ -163,7 +163,7 @@ class StoryPage extends HookWidget {
                                           padding:
                                               const EdgeInsets.only(left: 8.0),
                                           child: Text(
-                                            item.score.toString(),
+                                            "${item.score}",
                                             textAlign: TextAlign.center,
                                             style: Theme.of(context)
                                                 .textTheme
@@ -238,45 +238,28 @@ class StoryPage extends HookWidget {
                     ),
                   ),
                 ),
-                InkWell(
-                  onTap: () =>
-                      anim.isCompleted ? anim.reverse() : anim.forward(),
-                  child: Container(
-                    width: double.infinity,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 80),
-                      child: Column(
-                        children: [
-                          AnimatedBuilder(
-                            animation: anim,
-                            builder: (buildContext, child) {
-                              return Container(
-                                margin: EdgeInsets.symmetric(horizontal: 24.0),
-                                padding: EdgeInsets.only(
-                                    left: anim.value + 24.0,
-                                    right: 24.0 - anim.value),
-                                child: Icon(
-                                  Feather.anchor,
-                                  size: 50,
-                                  color:
-                                      Theme.of(context).textTheme.caption.color,
-                                ),
-                              );
-                            },
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: Text(
-                              "This is the end!",
-                              style: TextStyle(
-                                color:
-                                    Theme.of(context).textTheme.caption.color,
-                                fontSize: 20,
-                              ),
+                Container(
+                  width: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 80),
+                    child: Column(
+                      children: [
+                        Icon(
+                          Feather.anchor,
+                          size: 50,
+                          color: Theme.of(context).textTheme.caption.color,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            "This is the end!",
+                            style: TextStyle(
+                              color: Theme.of(context).textTheme.caption.color,
+                              fontSize: 20,
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
