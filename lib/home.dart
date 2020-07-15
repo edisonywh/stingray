@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:stingray/component/compact_tile.dart';
 import 'package:stingray/component/item_card.dart';
-import 'package:stingray/component/item_tile.dart';
+import 'package:stingray/deeplink_handler.dart';
 import 'package:stingray/helpers.dart';
 import 'package:stingray/model/item.dart';
 import 'package:stingray/page/story_page.dart';
@@ -27,6 +26,14 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     _controller = new ScrollController();
+
+    DeeplinkHandler.init(context);
+  }
+
+  @override
+  dispose() {
+    DeeplinkHandler.cancel();
+    super.dispose();
   }
 
   bool _handleScrollNotification(ScrollNotification notification) {
@@ -91,26 +98,25 @@ class _HomeState extends State<Home> {
                         },
                       ),
                       child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 2),
-                          child: OpenContainer(
-                            tappable: true,
-                            closedElevation: 0,
-                            closedColor:
-                                Theme.of(context).scaffoldBackgroundColor,
-                            openColor:
-                                Theme.of(context).scaffoldBackgroundColor,
-                            transitionDuration: Duration(milliseconds: 500),
-                            closedBuilder:
-                                (BuildContext c, VoidCallback action) =>
-                                    // CompactTile(item: item),
-                                    // ItemTile(item: item),
-                                    // CompactTile(item: item),
-                                    ItemCard(item: item),
-                            openBuilder:
-                                (BuildContext c, VoidCallback action) =>
-                                    StoryPage(item: item),
-                          )),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 2),
+                        child: OpenContainer(
+                          tappable: true,
+                          closedElevation: 0,
+                          closedColor:
+                              Theme.of(context).scaffoldBackgroundColor,
+                          openColor: Theme.of(context).scaffoldBackgroundColor,
+                          transitionDuration: Duration(milliseconds: 500),
+                          closedBuilder:
+                              (BuildContext c, VoidCallback action) =>
+                                  // CompactTile(item: item),
+                                  // ItemTile(item: item),
+                                  // CompactTile(item: item),
+                                  ItemCard(item: item),
+                          openBuilder: (BuildContext c, VoidCallback action) =>
+                              StoryPage(item: item),
+                        ),
+                      ),
                     );
                   },
                 ),
