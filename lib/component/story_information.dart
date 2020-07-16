@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:html_unescape/html_unescape_small.dart';
 import 'package:stingray/component/part_snippet.dart';
 import 'package:stingray/helpers.dart';
 import 'package:stingray/model/item.dart';
@@ -84,8 +84,9 @@ class StoryInformation extends HookWidget {
             if (item.text != "")
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),
-                child: Text(
-                  HtmlUnescape().convert(item.text),
+                child: Html(
+                  data: item.text,
+                  onLinkTap: (url) => launchUrl(url),
                 ),
               ),
             if (item.parts.isNotEmpty)

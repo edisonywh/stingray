@@ -1,10 +1,11 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:html_unescape/html_unescape_small.dart';
 import 'package:stingray/helpers.dart';
 import 'package:stingray/model/item.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Color indentColor(int depth) {
   List<Color> colors = [
@@ -19,6 +20,14 @@ Color indentColor(int depth) {
   int index = depth % colors.length;
 
   return colors[index];
+}
+
+void launchUrl(url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
 }
 
 class ExpandableComment extends StatelessWidget {
@@ -141,8 +150,9 @@ class ExpandableComment extends StatelessWidget {
                     ],
                   ),
                 ),
-                Text(
-                  HtmlUnescape().convert(item.text),
+                Html(
+                  data: item.text,
+                  onLinkTap: (url) => launchUrl(url),
                 ),
               ],
             ),
