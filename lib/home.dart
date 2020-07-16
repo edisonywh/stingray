@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -15,37 +16,7 @@ final FutureProvider topStories = FutureProvider((ref) async {
   return await Repo.getTopStories();
 });
 
-class Home extends StatefulWidget {
-  @override
-  _HomeState createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  ScrollController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = new ScrollController();
-
-    DeeplinkHandler.init(context);
-  }
-
-  @override
-  dispose() {
-    DeeplinkHandler.cancel();
-    super.dispose();
-  }
-
-  bool _handleScrollNotification(ScrollNotification notification) {
-    if (notification is ScrollEndNotification) {
-      if (_controller.position.extentAfter <= 100) {
-        print("Fetching..");
-      }
-    }
-    return false;
-  }
-
+class Home extends HookWidget {
   _handleUpvote() {
     print("Handle upvote here");
     return false;
@@ -53,6 +24,10 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    useMemoized(() => DeeplinkHandler.init(context));
+    useEffect(() => DeeplinkHandler.cancel, const []);
+    ScrollController scrollController = useScrollController();
+
     return Scaffold(
       body: SafeArea(
         child: Consumer(
@@ -64,9 +39,16 @@ class _HomeState extends State<Home> {
               error: (err, stack) => Center(child: Text('Error: $err')),
               data: (items) {
                 return NotificationListener(
-                  onNotification: _handleScrollNotification,
+                  onNotification: (notification) {
+                    if (notification is ScrollEndNotification) {
+                      if (scrollController.position.extentAfter <= 100) {
+                        print("Fetching..");
+                      }
+                    }
+                    return false;
+                  },
                   child: ListView.builder(
-                    controller: _controller,
+                    controller: scrollController,
                     itemCount: items.length,
                     itemBuilder: (context, index) {
                       Item item = items[index];
