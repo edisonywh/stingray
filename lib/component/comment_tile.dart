@@ -2,6 +2,7 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:stingray/component/comment_list.dart';
 import 'package:stingray/component/expandable_comment.dart';
 import 'package:stingray/component/loading_comment.dart';
 import 'package:stingray/model/item.dart';
