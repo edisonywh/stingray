@@ -21,7 +21,10 @@ class PartSnippet extends StatelessWidget {
         ),
         child: LoadingComment(),
       ),
-      error: (err, stack) => Center(child: Text('Error: $err')),
+      error: (err, stack) {
+        print(err);
+        return Center(child: Text('Error: $err'));
+      },
       data: (item) {
         return item.deleted
             ? Container()

@@ -34,7 +34,10 @@ class CommentTile extends HookWidget {
         ),
         child: LoadingComment(),
       ),
-      error: (err, stack) => Center(child: Text('Error: $err')),
+      error: (err, stack) {
+        print(err);
+        return Center(child: Text('Error: $err'));
+      },
       data: (item) {
         final comments =
             item.kids.map((i) => useProvider(commentsProvider(i))).toList();

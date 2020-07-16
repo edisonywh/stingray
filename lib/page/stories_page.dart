@@ -69,7 +69,10 @@ class StoriesPage extends HookWidget {
           loading: () {
             return LoadingStories();
           },
-          error: (err, stack) => Center(child: Text('Error: $err')),
+          error: (err, stack) {
+            print(err);
+            return Center(child: Text('Error: $err'));
+          },
           data: (items) {
             return NotificationListener(
               onNotification: (notification) {
