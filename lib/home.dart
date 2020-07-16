@@ -12,19 +12,30 @@ import 'package:stingray/component/loading_stories.dart';
 import 'package:stingray/deeplink_handler.dart';
 import 'package:stingray/helpers.dart';
 import 'package:stingray/model/item.dart';
+import 'package:stingray/page/stories_page.dart';
 import 'package:stingray/page/story_page.dart';
 import 'package:stingray/repo.dart';
 import 'package:stingray/theme.dart';
 
-final FutureProvider topStories = FutureProvider((ref) async {
-  return await Repo.getTopStories();
+final FutureProvider newStories = FutureProvider((ref) async {
+  return await Repo.getStories(StoriesType.newStories);
 });
 
-enum ViewType {
-  compactTile,
-  itemCard,
-  itemTile,
-}
+final FutureProvider bestStories = FutureProvider((ref) async {
+  return await Repo.getStories(StoriesType.bestStories);
+});
+
+final FutureProvider askStories = FutureProvider((ref) async {
+  return await Repo.getStories(StoriesType.askStories);
+});
+
+final FutureProvider showStories = FutureProvider((ref) async {
+  return await Repo.getStories(StoriesType.showStories);
+});
+
+final FutureProvider jobStories = FutureProvider((ref) async {
+  return await Repo.getStories(StoriesType.jobStories);
+});
 
 class Home extends HookWidget {
   final List tabs = [
@@ -36,37 +47,14 @@ class Home extends HookWidget {
     "Jobs",
   ];
 
-  _handleUpvote() {
-    print("Handle upvote here");
-    return false;
-  }
-
-  _getViewType(ViewType type, Item item) {
-    switch (type) {
-      case ViewType.compactTile:
-        return CompactTile(item: item);
-        break;
-      case ViewType.itemCard:
-        return ItemCard(item: item);
-        break;
-      case ViewType.itemTile:
-        return ItemTile(item: item);
-        break;
-      default:
-        return ItemCard(item: item);
-        break;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final currentIndex = useState(0);
-    final currentView = useState(ViewType.itemCard);
+    final currentView = useProvider(viewProvider);
     final currentTheme = useProvider(themeProvider);
 
     useMemoized(() => DeeplinkHandler.init(context));
     useEffect(() => DeeplinkHandler.cancel, const []);
-    ScrollController scrollController = useScrollController();
 
     return DefaultTabController(
       length: tabs.length,
@@ -127,27 +115,27 @@ class Home extends HookWidget {
                           RadioListTile(
                             title: const Text('Card'),
                             value: ViewType.itemCard,
-                            groupValue: currentView.value,
+                            groupValue: currentView.state,
                             onChanged: (value) {
-                              currentView.value = value;
+                              viewProvider.read(context).state = value;
                               Navigator.pop(context);
                             },
                           ),
                           RadioListTile(
                             title: const Text('Compact'),
                             value: ViewType.compactTile,
-                            groupValue: currentView.value,
+                            groupValue: currentView.state,
                             onChanged: (value) {
-                              currentView.value = value;
+                              viewProvider.read(context).state = value;
                               Navigator.pop(context);
                             },
                           ),
                           RadioListTile(
                             title: const Text('Tile'),
                             value: ViewType.itemTile,
-                            groupValue: currentView.value,
+                            groupValue: currentView.state,
                             onChanged: (value) {
-                              currentView.value = value;
+                              viewProvider.read(context).state = value;
                               Navigator.pop(context);
                             },
                           ),
@@ -185,85 +173,15 @@ class Home extends HookWidget {
           ),
         ),
         body: SafeArea(
-          child: Consumer(
-            (context, read) {
-              return read(topStories).when(
-                loading: () {
-                  return LoadingStories();
-                },
-                error: (err, stack) => Center(child: Text('Error: $err')),
-                data: (items) {
-                  return NotificationListener(
-                    onNotification: (notification) {
-                      if (notification is ScrollEndNotification) {
-                        if (scrollController.position.extentAfter <= 100) {
-                          print("Fetching..");
-                        }
-                      }
-                      return false;
-                    },
-                    child: ListView.builder(
-                      controller: scrollController,
-                      itemCount: items.length,
-                      itemBuilder: (context, index) {
-                        Item item = items[index];
-                        return Slidable(
-                          key: Key(item.id.toString()),
-                          actionPane: SlidableScrollActionPane(),
-                          actions: <Widget>[
-                            IconSlideAction(
-                              color: Colors.deepOrangeAccent,
-                              icon: Feather.arrow_up_circle,
-                              onTap: () => _handleUpvote(),
-                            ),
-                          ],
-                          secondaryActions: [
-                            IconSlideAction(
-                              color: Colors.blue,
-                              icon: Feather.share_2,
-                              onTap: () => handleShare(item.id),
-                            ),
-                          ],
-                          dismissal: SlidableDismissal(
-                            dismissThresholds: {
-                              SlideActionType.primary: 0.2,
-                              SlideActionType.secondary: 0.2,
-                            },
-                            closeOnCanceled: true,
-                            child: SlidableDrawerDismissal(),
-                            onWillDismiss: (actionType) {
-                              actionType == SlideActionType.primary
-                                  ? _handleUpvote()
-                                  : handleShare(item.id);
-                              return false;
-                            },
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 2),
-                            child: OpenContainer(
-                              tappable: true,
-                              closedElevation: 0,
-                              closedColor:
-                                  Theme.of(context).scaffoldBackgroundColor,
-                              openColor:
-                                  Theme.of(context).scaffoldBackgroundColor,
-                              transitionDuration: Duration(milliseconds: 500),
-                              closedBuilder:
-                                  (BuildContext c, VoidCallback action) =>
-                                      _getViewType(currentView.value, item),
-                              openBuilder:
-                                  (BuildContext c, VoidCallback action) =>
-                                      StoryPage(item: item),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                },
-              );
-            },
+          child: TabBarView(
+            children: [
+              StoriesPage(type: StoriesType.topStories),
+              StoriesPage(type: StoriesType.newStories),
+              StoriesPage(type: StoriesType.bestStories),
+              StoriesPage(type: StoriesType.showStories),
+              StoriesPage(type: StoriesType.askStories),
+              StoriesPage(type: StoriesType.jobStories),
+            ],
           ),
         ),
       ),

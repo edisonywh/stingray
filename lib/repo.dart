@@ -8,8 +8,8 @@ class Repo {
 
   static const baseUrl = "https://hacker-news.firebaseio.com/v0";
 
-  static Future<List<Item>> getTopStories() async {
-    Iterable itemIds = await _getIds(StoriesType.topStories);
+  static Future<List<Item>> getStories(StoriesType type) async {
+    Iterable itemIds = await _getIds(type);
 
     return fetchByIds(itemIds);
   }
@@ -61,6 +61,15 @@ class Repo {
         break;
       case StoriesType.topStories:
         return "topstories";
+        break;
+      case StoriesType.askStories:
+        return "askstories";
+        break;
+      case StoriesType.showStories:
+        return "showstories";
+        break;
+      case StoriesType.jobStories:
+        return "jobstories";
         break;
       default:
         return "none";

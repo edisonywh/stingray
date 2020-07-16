@@ -13,6 +13,9 @@ enum StoriesType {
   topStories,
   newStories,
   bestStories,
+  askStories,
+  showStories,
+  jobStories,
 }
 
 class Item {
