@@ -14,7 +14,7 @@ import 'package:stingray/model/item.dart';
 import 'package:stingray/page/story_page.dart';
 import 'package:stingray/repo.dart';
 
-final viewProvider = StateProvider((ref) {
+final StateProvider<ViewType> viewProvider = StateProvider((ref) {
   return ViewType.itemCard;
 });
 

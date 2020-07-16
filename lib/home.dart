@@ -1,19 +1,11 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:stingray/component/compact_tile.dart';
-import 'package:stingray/component/item_card.dart';
-import 'package:stingray/component/item_tile.dart';
-import 'package:stingray/component/loading_stories.dart';
 import 'package:stingray/deeplink_handler.dart';
-import 'package:stingray/helpers.dart';
 import 'package:stingray/model/item.dart';
 import 'package:stingray/page/stories_page.dart';
-import 'package:stingray/page/story_page.dart';
 import 'package:stingray/repo.dart';
 import 'package:stingray/theme.dart';
 
