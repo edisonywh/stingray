@@ -97,23 +97,18 @@ class StoryPage extends HookWidget {
                             ),
                           ),
                         ),
-                        Text(
-                          item.domain,
-                          style: Theme.of(context).textTheme.caption,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Text(
+                            item.domain,
+                            style: Theme.of(context).textTheme.caption,
+                          ),
                         ),
                         RichText(
                           text: TextSpan(
                             children: <TextSpan>[
                               TextSpan(
                                 text: item.ago,
-                                style: Theme.of(context).textTheme.caption,
-                              ),
-                              TextSpan(
-                                text: " ${String.fromCharCode(8226)} ",
-                                style: Theme.of(context).textTheme.caption,
-                              ),
-                              TextSpan(
-                                text: item.descendants.toString(),
                                 style: Theme.of(context).textTheme.caption,
                               ),
                               TextSpan(
@@ -139,7 +134,7 @@ class StoryPage extends HookWidget {
                               HtmlUnescape().convert(item.text),
                             ),
                           ),
-                        if (item.parts != [])
+                        if (item.parts.isNotEmpty)
                           Padding(
                             padding: const EdgeInsets.only(top: 8.0),
                             child: ListView.builder(
