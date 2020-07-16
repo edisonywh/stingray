@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stingray/component/compact_tile.dart';
 import 'package:stingray/component/item_card.dart';
 import 'package:stingray/component/item_tile.dart';
@@ -13,6 +14,7 @@ import 'package:stingray/helpers.dart';
 import 'package:stingray/model/item.dart';
 import 'package:stingray/page/story_page.dart';
 import 'package:stingray/repo.dart';
+import 'package:stingray/theme.dart';
 
 final FutureProvider topStories = FutureProvider((ref) async {
   return await Repo.getTopStories();
@@ -60,6 +62,7 @@ class Home extends HookWidget {
   Widget build(BuildContext context) {
     final currentIndex = useState(0);
     final currentView = useState(ViewType.itemCard);
+    final currentTheme = useProvider(themeProvider);
 
     useMemoized(() => DeeplinkHandler.init(context));
     useEffect(() => DeeplinkHandler.cancel, const []);
@@ -70,6 +73,50 @@ class Home extends HookWidget {
       child: Scaffold(
         appBar: AppBar(
           actions: [
+            Consumer((context, read) {
+              return IconButton(
+                onPressed: () => showDialog(
+                  context: context,
+                  builder: (context) {
+                    return SimpleDialog(
+                      title: Text("Theme"),
+                      children: [
+                        RadioListTile(
+                          title: const Text('Light'),
+                          value: lightTheme,
+                          groupValue: currentTheme.state,
+                          onChanged: (value) {
+                            themeProvider.read(context).state = value;
+                            Navigator.pop(context);
+                          },
+                        ),
+                        RadioListTile(
+                          title: const Text('Dark'),
+                          value: darkTheme,
+                          groupValue: currentTheme.state,
+                          onChanged: (value) {
+                            themeProvider.read(context).state = value;
+                            Navigator.pop(context);
+                          },
+                        ),
+                        RadioListTile(
+                          title: const Text('True Black'),
+                          value: trueBlackTheme,
+                          groupValue: currentTheme.state,
+                          onChanged: (value) {
+                            themeProvider.read(context).state = value;
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                icon: Icon(
+                  Feather.moon,
+                ),
+              );
+            }),
             IconButton(
               onPressed: () => showDialog(
                   context: context,
@@ -107,7 +154,7 @@ class Home extends HookWidget {
                         ]);
                   }),
               icon: Icon(
-                Feather.pie_chart,
+                Feather.grid,
               ),
             )
           ],
@@ -115,7 +162,9 @@ class Home extends HookWidget {
             'Stingray',
             style: TextStyle(
               fontSize: 32,
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.white
+                  : Theme.of(context).primaryColor,
             ),
           ),
           bottom: TabBar(

@@ -67,10 +67,7 @@ class ItemTile extends StatelessWidget {
                             child: Text(
                               item.descendants.toString(),
                               textAlign: TextAlign.center,
-                              style:
-                                  Theme.of(context).textTheme.caption.copyWith(
-                                        color: Colors.white,
-                                      ),
+                              style: Theme.of(context).textTheme.caption,
                             ),
                           ),
                         ],
@@ -89,10 +86,7 @@ class ItemTile extends StatelessWidget {
                             child: Text(
                               item.ago,
                               textAlign: TextAlign.center,
-                              style:
-                                  Theme.of(context).textTheme.caption.copyWith(
-                                        color: Colors.white,
-                                      ),
+                              style: Theme.of(context).textTheme.caption,
                             ),
                           ),
                         ],

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stingray/home.dart';
 import 'package:stingray/theme.dart';
 
@@ -18,13 +20,13 @@ void main() {
   runApp(ProviderScope(child: App()));
 }
 
-class App extends StatelessWidget {
+class App extends HookWidget {
   @override
   Widget build(BuildContext context) {
+    final theme = useProvider(themeProvider).state;
     return MaterialApp(
       title: 'Stingray',
-      theme: trueBlackTheme,
-      // theme: darkTheme,
+      theme: theme,
       home: Home(),
     );
   }

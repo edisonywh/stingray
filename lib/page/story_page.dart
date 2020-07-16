@@ -198,10 +198,7 @@ class StoryPage extends HookWidget {
                                             textAlign: TextAlign.center,
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .caption
-                                                .copyWith(
-                                                  color: Colors.white,
-                                                ),
+                                                .caption,
                                           ),
                                         ),
                                       ],
