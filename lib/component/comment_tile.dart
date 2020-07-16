@@ -19,7 +19,12 @@ class CommentTile extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    var anim = useAnimationController(duration: Duration(seconds: 2));
+    var anim = useAnimationController(
+      duration: Duration(seconds: 1),
+    );
+    final Animation curve =
+        CurvedAnimation(parent: anim, curve: Curves.easeInOut);
+
     anim.forward();
 
     return comment.when(
@@ -47,39 +52,44 @@ class CommentTile extends HookWidget {
                 Builder(
                   builder: (context) {
                     var controller = ExpandableController.of(context);
-                    return FadeTransition(
-                      opacity: anim,
-                      child: Expandable(
-                        theme: const ExpandableThemeData(crossFadePoint: 0),
-                        collapsed: Builder(
-                          builder: (context) {
-                            return ExpandableComment(
-                              controller: controller,
-                              depth: depth,
-                              item: item,
-                            );
-                          },
-                        ),
-                        expanded: Column(
-                          children: [
-                            ExpandableComment(
-                              controller: controller,
-                              depth: depth,
-                              item: item,
-                            ),
-                            ListView.builder(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: item.kids.length,
-                              itemBuilder: (context, index) {
-                                return CommentTile(
+                    return Expandable(
+                      theme: const ExpandableThemeData(crossFadePoint: 0),
+                      collapsed: Builder(
+                        builder: (context) {
+                          return ExpandableComment(
+                            controller: controller,
+                            depth: depth,
+                            item: item,
+                          );
+                        },
+                      ),
+                      expanded: Column(
+                        children: [
+                          ExpandableComment(
+                            controller: controller,
+                            depth: depth,
+                            item: item,
+                          ),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: item.kids.length,
+                            itemBuilder: (context, index) {
+                              return SlideTransition(
+                                position: Tween(
+                                  begin: Offset((index + 1) * -0.25, 0),
+                                  end: Offset(0, 0),
+                                ).animate(
+                                  curve,
+                                ),
+                                child: CommentTile(
                                   comment: comments[index],
                                   depth: depth + 1,
-                                );
-                              },
-                            ),
-                          ],
-                        ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     );
                   },

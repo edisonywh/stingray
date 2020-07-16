@@ -41,6 +41,14 @@ class StoryPage extends HookWidget {
         item.kids.map((i) => useProvider(commentsProvider(i))).toList();
     final parts = item.parts.map((i) => useProvider(partsProvider(i))).toList();
 
+    var anim = useAnimationController(
+      duration: Duration(seconds: 1),
+    );
+    final Animation curve =
+        CurvedAnimation(parent: anim, curve: Curves.easeInOut);
+
+    anim.forward();
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Stingray'),
@@ -228,9 +236,17 @@ class StoryPage extends HookWidget {
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: item.kids.length,
                       itemBuilder: (context, index) {
-                        return CommentTile(
-                          comment: comments[index],
-                          depth: 0,
+                        return SlideTransition(
+                          position: Tween(
+                            begin: Offset((index + 1) * -0.25, 0),
+                            end: Offset(0, 0),
+                          ).animate(
+                            curve,
+                          ),
+                          child: CommentTile(
+                            comment: comments[index],
+                            depth: 0,
+                          ),
                         );
                       },
                     ),
