@@ -9,11 +9,7 @@ class Repo {
   static const baseUrl = "https://hacker-news.firebaseio.com/v0";
 
   static Future<List<int>> getStories(StoriesType type) async {
-    // Iterable itemIds = await _getIds(type);
-
     return await _getIds(type);
-
-    // return fetchByIds(itemIds);
   }
 
   /// Takes in an Item and fetches all of its

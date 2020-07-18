@@ -11,9 +11,11 @@ class CommentTile extends HookWidget {
   const CommentTile({
     Key key,
     @required this.comment,
+    @required this.author,
   }) : super(key: key);
 
   final Item comment;
+  final String author;
 
   Color indentColor(int depth) {
     List<Color> colors = [
@@ -36,6 +38,45 @@ class CommentTile extends HookWidget {
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  Widget _buildAuthor(BuildContext context, Item comment) {
+    if (comment.deleted) {
+      return Text(
+        "<deleted>",
+        style: Theme.of(context).textTheme.caption.copyWith(
+              fontStyle: FontStyle.italic,
+            ),
+      );
+    }
+
+    if (comment.by == author) {
+      return Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).accentColor,
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 6,
+          ),
+          child: Text(
+            comment.by,
+            style: Theme.of(context).textTheme.caption.copyWith(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                ),
+          ),
+        ),
+      );
+    }
+
+    return Text(
+      comment.by,
+      style: Theme.of(context).textTheme.caption.copyWith(
+            color: Theme.of(context).primaryColor,
+          ),
+    );
   }
 
   @override
@@ -92,38 +133,24 @@ class CommentTile extends HookWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      RichText(
-                        text: TextSpan(
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: comment.ago,
-                              style: Theme.of(context).textTheme.caption,
+                      Row(
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: comment.ago,
+                                  style: Theme.of(context).textTheme.caption,
+                                ),
+                                TextSpan(
+                                  text: " ${String.fromCharCode(8226)} ",
+                                  style: Theme.of(context).textTheme.caption,
+                                ),
+                              ],
                             ),
-                            TextSpan(
-                              text: " ${String.fromCharCode(8226)} ",
-                              style: Theme.of(context).textTheme.caption,
-                            ),
-                            comment.deleted
-                                ? TextSpan(
-                                    text: "<deleted>",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .caption
-                                        .copyWith(
-                                          fontStyle: FontStyle.italic,
-                                        ),
-                                  )
-                                : TextSpan(
-                                    text: comment.by,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .caption
-                                        .copyWith(
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                  ),
-                          ],
-                        ),
+                          ),
+                          _buildAuthor(context, comment),
+                        ],
                       ),
                       if (!isExpanded.value && comment.kids.isNotEmpty)
                         Container(

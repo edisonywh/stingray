@@ -37,6 +37,7 @@ class CommentList extends HookWidget {
                 (context, index) {
                   return CommentTile(
                     comment: comments[index],
+                    author: item.by,
                   );
                 },
                 childCount: comments.length,
