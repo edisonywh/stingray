@@ -44,38 +44,42 @@ class StoryInformation extends HookWidget {
           children: [
             InkWell(
               onTap: () => launchUrl(item.url),
-              child: Container(
-                child: Text(
-                  item.title,
-                  style: Theme.of(context).textTheme.headline5.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Container(
+                  child: Text(
+                    item.title,
+                    style: Theme.of(context).textTheme.headline5.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Text(
-                item.domain,
-                style: Theme.of(context).textTheme.caption,
+            if (item.domain != "")
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Text(
+                  item.domain,
+                  style: Theme.of(context).textTheme.caption,
+                ),
               ),
-            ),
             RichText(
               text: TextSpan(
                 children: <TextSpan>[
                   TextSpan(
-                    text: item.ago,
-                    style: Theme.of(context).textTheme.caption,
+                    text: item.by,
+                    style: Theme.of(context).textTheme.caption.copyWith(
+                          color: Theme.of(context).primaryColor,
+                        ),
                   ),
                   TextSpan(
                     text: " ${String.fromCharCode(8226)} ",
                     style: Theme.of(context).textTheme.caption,
                   ),
                   TextSpan(
-                    text: item.by,
-                    style: Theme.of(context).textTheme.caption.copyWith(
-                          color: Theme.of(context).primaryColor,
-                        ),
+                    text: item.ago,
+                    style: Theme.of(context).textTheme.caption,
                   ),
                 ],
               ),

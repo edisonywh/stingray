@@ -135,21 +135,21 @@ class CommentTile extends HookWidget {
                     children: [
                       Row(
                         children: [
+                          _buildAuthor(context, comment),
                           RichText(
                             text: TextSpan(
                               children: <TextSpan>[
                                 TextSpan(
-                                  text: comment.ago,
+                                  text: " ${String.fromCharCode(8226)} ",
                                   style: Theme.of(context).textTheme.caption,
                                 ),
                                 TextSpan(
-                                  text: " ${String.fromCharCode(8226)} ",
+                                  text: comment.ago,
                                   style: Theme.of(context).textTheme.caption,
                                 ),
                               ],
                             ),
                           ),
-                          _buildAuthor(context, comment),
                         ],
                       ),
                       if (!isExpanded.value && comment.kids.isNotEmpty)
