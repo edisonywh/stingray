@@ -1,107 +1,162 @@
-import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:stingray/component/comment_list.dart';
-import 'package:stingray/component/expandable_comment.dart';
-import 'package:stingray/component/loading_comment.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:stingray/helpers.dart';
 import 'package:stingray/model/item.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CommentTile extends HookWidget {
   const CommentTile({
     Key key,
     @required this.comment,
-    @required this.depth,
   }) : super(key: key);
 
-  final AsyncValue<Item> comment;
-  final int depth;
+  final Item comment;
+
+  Color indentColor(int depth) {
+    List<Color> colors = [
+      Colors.lightBlue.shade900,
+      Colors.pink.shade900,
+      Colors.yellow.shade900,
+      Colors.green.shade900,
+      Colors.purple.shade900,
+      Colors.red.shade900,
+    ];
+
+    int index = depth % colors.length;
+
+    return colors[index];
+  }
+
+  void launchUrl(url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    var anim = useAnimationController(
-      duration: Duration(seconds: 1),
-    );
-    final Animation curve =
-        CurvedAnimation(parent: anim, curve: Curves.easeInOut);
-
-    anim.forward();
-
-    return comment.when(
-      loading: () => Padding(
-        padding: const EdgeInsets.only(
-          left: 4,
-        ),
-        child: LoadingComment(),
-      ),
-      error: (err, stack) {
-        print(err);
-        return Center(child: Text('Error: $err'));
-      },
-      data: (item) {
-        final comments =
-            item.kids.map((i) => useProvider(commentsProvider(i))).toList();
-        return Padding(
-          padding: new EdgeInsets.only(
-            left: 4,
-            bottom: depth == 0 ? 16 : 6,
+    final isExpanded = useState(true);
+    return Padding(
+      padding: EdgeInsets.only(left: comment.depth * 4.0),
+      child: Slidable(
+        key: Key(comment.id.toString()),
+        actionPane: SlidableScrollActionPane(),
+        actions: <Widget>[
+          IconSlideAction(
+            color: Colors.deepOrangeAccent,
+            icon: Feather.arrow_up_circle,
+            onTap: () => {},
           ),
-          child: ExpandableNotifier(
-            key: Key(item.id.toString()),
-            initialExpanded: true,
+        ],
+        secondaryActions: [
+          IconSlideAction(
+            color: Colors.blue,
+            icon: Feather.share_2,
+            onTap: () => handleShare(comment.id),
+          ),
+        ],
+        dismissal: SlidableDismissal(
+          dismissThresholds: {
+            SlideActionType.primary: 0.2,
+            SlideActionType.secondary: 0.2,
+          },
+          closeOnCanceled: true,
+          child: SlidableDrawerDismissal(),
+          onWillDismiss: (actionType) {
+            if (actionType == SlideActionType.secondary)
+              handleShare(comment.id);
+            return false;
+          },
+        ),
+        child: Card(
+          shape: Border(
+            left: BorderSide(width: 3.0, color: indentColor(comment.depth)),
+          ),
+          color: Theme.of(context).scaffoldBackgroundColor,
+          margin: EdgeInsets.zero,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 8,
+              horizontal: 16.0,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Builder(
-                  builder: (context) {
-                    var controller = ExpandableController.of(context);
-                    return Expandable(
-                      theme: const ExpandableThemeData(crossFadePoint: 0),
-                      collapsed: Builder(
-                        builder: (context) {
-                          return ExpandableComment(
-                            controller: controller,
-                            depth: depth,
-                            item: item,
-                          );
-                        },
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 4.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: comment.ago,
+                              style: Theme.of(context).textTheme.caption,
+                            ),
+                            TextSpan(
+                              text: " ${String.fromCharCode(8226)} ",
+                              style: Theme.of(context).textTheme.caption,
+                            ),
+                            comment.deleted
+                                ? TextSpan(
+                                    text: "<deleted>",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .caption
+                                        .copyWith(
+                                          fontStyle: FontStyle.italic,
+                                        ),
+                                  )
+                                : TextSpan(
+                                    text: comment.by,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .caption
+                                        .copyWith(
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                  ),
+                          ],
+                        ),
                       ),
-                      expanded: Column(
-                        children: [
-                          ExpandableComment(
-                            controller: controller,
-                            depth: depth,
-                            item: item,
+                      if (!isExpanded.value && comment.kids.isNotEmpty)
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).accentColor,
+                            borderRadius: BorderRadius.circular(4),
                           ),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: item.kids.length,
-                            itemBuilder: (context, index) {
-                              return SlideTransition(
-                                position: Tween(
-                                  begin: Offset((index + 1) * -0.25, 0),
-                                  end: Offset(0, 0),
-                                ).animate(
-                                  curve,
-                                ),
-                                child: CommentTile(
-                                  comment: comments[index],
-                                  depth: depth + 1,
-                                ),
-                              );
-                            },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 6,
+                            ),
+                            child: Text(
+                              "+${comment.kids.length}",
+                              style:
+                                  Theme.of(context).textTheme.caption.copyWith(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                            ),
                           ),
-                        ],
-                      ),
-                    );
-                  },
+                        ),
+                    ],
+                  ),
+                ),
+                Html(
+                  data: comment.text,
+                  onLinkTap: (url) => launchUrl(url),
                 ),
               ],
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

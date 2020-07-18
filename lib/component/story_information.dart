@@ -33,9 +33,8 @@ class StoryInformation extends HookWidget {
   Widget build(BuildContext context) {
     final parts = item.parts.map((i) => useProvider(partsProvider(i))).toList();
 
-    return Card(
+    return Container(
       color: Theme.of(context).scaffoldBackgroundColor,
-      margin: EdgeInsets.zero,
       child: Padding(
         padding: const EdgeInsets.all(
           16.0,

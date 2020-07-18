@@ -20,6 +20,7 @@ enum StoriesType {
 
 class Item {
   Item({
+    this.depth,
     this.by,
     this.deleted,
     this.text,
@@ -37,6 +38,7 @@ class Item {
     this.url,
   });
 
+  int depth;
   String by;
   bool deleted;
   String text;

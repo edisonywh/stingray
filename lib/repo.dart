@@ -8,14 +8,46 @@ class Repo {
 
   static const baseUrl = "https://hacker-news.firebaseio.com/v0";
 
-  static Future<List<Item>> getStories(StoriesType type) async {
-    Iterable itemIds = await _getIds(type);
+  static Future<List<int>> getStories(StoriesType type) async {
+    // Iterable itemIds = await _getIds(type);
 
-    return fetchByIds(itemIds);
+    return await _getIds(type);
+
+    // return fetchByIds(itemIds);
+  }
+
+  /// Takes in an Item and fetches all of its
+  /// descendant in flat, sorted order.
+  /// It is important to fetch a flattened list for optimized
+  /// UI rendering. The other alternative I've tried is to
+  /// render the list recursively, but nested ListView is
+  /// expensive to render.
+  static Future<List<Item>> fetchDescendants(
+      {Item item, int depth = 0, prefetch = false}) async {
+    List<Item> result = [];
+    if (item.parent != null) result.add(item);
+    if (item.kids.isEmpty) return Future.value(result);
+
+    if (prefetch) {
+      await Future.wait(item.kids.map((kidId) async {
+        Item kid = await fetchItem(kidId);
+        await fetchDescendants(item: kid, depth: 0, prefetch: true);
+      }));
+    } else {
+      await Future.forEach(item.kids, ((kidId) async {
+        Item kid = await fetchItem(kidId);
+        kid.depth = depth;
+        List<Item> grandkids =
+            await fetchDescendants(item: kid, depth: depth + 1);
+        result.addAll(grandkids);
+      }));
+    }
+
+    return Future.value(result);
   }
 
   static Future<List<Item>> fetchByIds(List<int> ids) async {
-    return Future.wait(ids.take(50).map((itemId) {
+    return Future.wait(ids.map((itemId) {
       return fetchItem(itemId);
     }));
   }

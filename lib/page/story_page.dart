@@ -36,40 +36,35 @@ class StoryPage extends HookWidget {
       ),
       body: CustomScrollView(
         slivers: [
+          SliverToBoxAdapter(child: StoryInformation(item: item)),
+          CommentList(item: item),
           SliverToBoxAdapter(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                StoryInformation(item: item),
-                CommentList(item: item),
-                Container(
-                  width: double.infinity,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 80),
-                    child: Column(
-                      children: [
-                        Icon(
-                          Feather.anchor,
-                          size: 50,
-                          color: Theme.of(context).textTheme.caption.color,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            "This is the end!",
-                            style: TextStyle(
-                              color: Theme.of(context).textTheme.caption.color,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ],
+            child: Container(
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 80),
+                child: Column(
+                  children: [
+                    Icon(
+                      Feather.anchor,
+                      size: 50,
+                      color: Theme.of(context).textTheme.caption.color,
                     ),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Text(
+                        "This is the end!",
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.caption.color,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          )
+          ),
         ],
       ),
     );
