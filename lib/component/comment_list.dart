@@ -32,15 +32,18 @@ class CommentList extends HookWidget {
                 child: Center(child: Text('Error: $err')));
           },
           data: (comments) {
-            return SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return CommentTile(
-                    comment: comments[index],
-                    author: item.by,
-                  );
-                },
-                childCount: comments.length,
+            return SliverPadding(
+              padding: const EdgeInsets.all(8.0),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    return CommentTile(
+                      comment: comments[index],
+                      author: item.by,
+                    );
+                  },
+                  childCount: comments.length,
+                ),
               ),
             );
           },
