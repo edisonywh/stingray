@@ -6,9 +6,8 @@ import 'package:stingray/component/loading_stories.dart';
 import 'package:stingray/model/item.dart';
 import 'package:stingray/repo.dart';
 
-final commentsProvider = FutureProvider.family((ref, Item item) async {
-  await Repo.fetchDescendants(item: item, prefetch: true);
-  return await Repo.fetchDescendants(item: item);
+final commentsProvider = FutureProvider.family((ref, int id) async {
+  return await Repo.fetchItem(id);
 });
 
 class CommentList extends HookWidget {
@@ -21,34 +20,51 @@ class CommentList extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer(
-      (context, read) {
-        return read(commentsProvider(item)).when(
-          loading: () {
-            return SliverToBoxAdapter(child: LoadingStories());
-          },
-          error: (err, stack) {
-            return SliverToBoxAdapter(
-                child: Center(child: Text('Error: $err')));
-          },
-          data: (comments) {
-            return SliverPadding(
-              padding: const EdgeInsets.all(8.0),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return CommentTile(
-                      comment: comments[index],
-                      author: item.by,
-                    );
-                  },
-                  childCount: comments.length,
-                ),
-              ),
+    useMemoized(() {
+      Repo.prefetchComments(item: item);
+    });
+
+    final ids = useState([]);
+    Stream<int> stream;
+    useEffect(() {
+      stream = Repo.lazyFetchComments(item: item);
+      final sub = stream.listen((int comment) {
+        ids.value = [...ids.value, comment];
+      });
+      return sub.cancel;
+    }, [stream]);
+
+    return SliverPadding(
+      padding: const EdgeInsets.all(8.0),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            Widget _child = (ids.value.isEmpty || index > ids.value.length - 1)
+                ? LoadingStories(count: 1)
+                : Consumer(
+                    (context, read) {
+                      return read(commentsProvider(ids.value[index])).when(
+                        loading: () => LoadingStories(count: 1),
+                        error: (err, trace) => Text(err),
+                        data: (comment) {
+                          return CommentTile(
+                            comment: comment,
+                            author: item.by,
+                          );
+                        },
+                      );
+                    },
+                  );
+
+            return AnimatedSwitcher(
+              switchInCurve: Curves.easeInOut,
+              duration: Duration(seconds: 1),
+              child: _child,
             );
           },
-        );
-      },
+          childCount: item.descendants,
+        ),
+      ),
     );
   }
 }

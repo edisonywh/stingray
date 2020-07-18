@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
@@ -12,32 +13,38 @@ class Repo {
     return await _getIds(type);
   }
 
+  static Stream<int> lazyFetchComments({Item item, int depth = 0}) async* {
+    if (item.kids.isEmpty) return;
+
+    for (int kidId in item.kids) {
+      Item kid = await fetchItem(kidId);
+
+      kid.depth = depth;
+
+      yield kid.id;
+
+      Stream stream = lazyFetchComments(item: kid, depth: kid.depth + 1);
+      await for (int grandkid in stream) {
+        yield grandkid;
+      }
+    }
+  }
+
   /// Takes in an Item and fetches all of its
-  /// descendant in flat, sorted order.
-  /// It is important to fetch a flattened list for optimized
-  /// UI rendering. The other alternative I've tried is to
-  /// render the list recursively, but nested ListView is
-  /// expensive to render.
-  static Future<List<Item>> fetchDescendants(
-      {Item item, int depth = 0, prefetch = false}) async {
+  /// descendant in flat, non-sorted order.
+  ///
+  /// This mostly exists so that I can fetch items async,
+  /// put them in a cache, so that later I can retrieve them
+  /// in a sorted order.
+  static Future<List<Item>> prefetchComments({Item item}) async {
     List<Item> result = [];
     if (item.parent != null) result.add(item);
     if (item.kids.isEmpty) return Future.value(result);
 
-    if (prefetch) {
-      await Future.wait(item.kids.map((kidId) async {
-        Item kid = await fetchItem(kidId);
-        await fetchDescendants(item: kid, depth: 0, prefetch: true);
-      }));
-    } else {
-      await Future.forEach(item.kids, ((kidId) async {
-        Item kid = await fetchItem(kidId);
-        kid.depth = depth;
-        List<Item> grandkids =
-            await fetchDescendants(item: kid, depth: depth + 1);
-        result.addAll(grandkids);
-      }));
-    }
+    await Future.wait(item.kids.map((kidId) async {
+      Item kid = await fetchItem(kidId);
+      await prefetchComments(item: kid);
+    }));
 
     return Future.value(result);
   }

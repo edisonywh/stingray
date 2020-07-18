@@ -20,7 +20,7 @@ enum StoriesType {
 
 class Item {
   Item({
-    this.depth,
+    this.depth = 0,
     this.by,
     this.deleted,
     this.text,
