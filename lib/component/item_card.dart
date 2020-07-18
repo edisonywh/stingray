@@ -20,10 +20,11 @@ class ItemCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                item.domain,
-                style: Theme.of(context).textTheme.caption,
-              ),
+              if (item.domain != "")
+                Text(
+                  item.domain,
+                  style: Theme.of(context).textTheme.caption,
+                ),
               Padding(
                 padding: const EdgeInsets.only(top: 8, bottom: 16.0),
                 child: Text(
