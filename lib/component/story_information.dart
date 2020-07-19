@@ -48,7 +48,7 @@ class StoryInformation extends HookWidget {
                 padding: const EdgeInsets.only(bottom: 8.0),
                 child: Container(
                   child: Text(
-                    item.title,
+                    item.title == "" ? "Comment" : item.title,
                     style: Theme.of(context).textTheme.headline5.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
@@ -85,12 +85,9 @@ class StoryInformation extends HookWidget {
               ),
             ),
             if (item.text != "")
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: Html(
-                  data: item.text,
-                  onLinkTap: (url) => launchUrl(url),
-                ),
+              Html(
+                data: item.text,
+                onLinkTap: (url) => launchUrl(url),
               ),
             if (item.parts.isNotEmpty)
               Padding(
@@ -104,64 +101,59 @@ class StoryInformation extends HookWidget {
                   },
                 ),
               ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 16.0),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Feather.arrow_up,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 16.0),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Feather.arrow_up,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Text(
+                              "${item.score}",
+                              textAlign: TextAlign.center,
+                              style:
+                                  Theme.of(context).textTheme.caption.copyWith(
+                                        color: Theme.of(context).primaryColor,
+                                      ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: Text(
-                                "${item.score}",
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .caption
-                                    .copyWith(
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 16.0),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Feather.message_square,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: Text(
-                                item.descendants.toString(),
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context).textTheme.caption,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Feather.share_2,
                     ),
-                    onPressed: () => handleShare(item.id),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 16.0),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Feather.message_square,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Text(
+                              item.descendants.toString(),
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.caption,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                IconButton(
+                  icon: Icon(
+                    Feather.share_2,
                   ),
-                ],
-              ),
+                  onPressed: () => handleShare(item.id),
+                ),
+              ],
             ),
           ],
         ),

@@ -74,7 +74,7 @@ class CommentTile extends HookWidget {
     return Text(
       comment.by,
       style: Theme.of(context).textTheme.caption.copyWith(
-            color: Theme.of(context).primaryColor,
+            fontWeight: FontWeight.w500,
           ),
     );
   }
