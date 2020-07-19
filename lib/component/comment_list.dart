@@ -24,6 +24,7 @@ class CommentList extends HookWidget {
       Repo.prefetchComments(item: item);
     });
 
+    final collapsed = useState(Set());
     final ids = useState([]);
     Stream<int> stream;
     useEffect(() {
@@ -47,9 +48,32 @@ class CommentList extends HookWidget {
                         loading: () => LoadingStories(count: 1),
                         error: (err, trace) => Text(err),
                         data: (comment) {
-                          return CommentTile(
-                            comment: comment,
-                            author: item.by,
+                          Set result = Set.from(collapsed.value);
+                          return InkWell(
+                            onTap: () {
+                              if (comment.kids.isEmpty) return;
+
+                              if (collapsed.value.contains(comment.id)) {
+                                result.remove(comment.id);
+                              } else {
+                                result.add(comment.id);
+                                result.addAll(comment.kids);
+                              }
+                              collapsed.value = result;
+                            },
+                            child: AnimatedSwitcher(
+                              duration: Duration(milliseconds: 500),
+                              switchInCurve: Curves.easeInOut,
+                              switchOutCurve: Curves.easeInOut,
+                              child: collapsed.value.contains(comment.parent)
+                                  ? Container()
+                                  : CommentTile(
+                                      comment: comment,
+                                      author: item.by,
+                                      isCollapsed:
+                                          collapsed.value.contains(comment.id),
+                                    ),
+                            ),
                           );
                         },
                       );

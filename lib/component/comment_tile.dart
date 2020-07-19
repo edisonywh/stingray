@@ -12,10 +12,12 @@ class CommentTile extends HookWidget {
     Key key,
     @required this.comment,
     @required this.author,
+    this.isCollapsed = false,
   }) : super(key: key);
 
   final Item comment;
   final String author;
+  final bool isCollapsed;
 
   Color indentColor(int depth) {
     List<Color> colors = [
@@ -81,7 +83,6 @@ class CommentTile extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isExpanded = useState(true);
     return Padding(
       padding: EdgeInsets.only(left: comment.depth * 4.0),
       child: Slidable(
@@ -152,7 +153,7 @@ class CommentTile extends HookWidget {
                           ),
                         ],
                       ),
-                      if (!isExpanded.value && comment.kids.isNotEmpty)
+                      if (isCollapsed && comment.kids.isNotEmpty)
                         Container(
                           decoration: BoxDecoration(
                             color: Theme.of(context).accentColor,
