@@ -33,11 +33,12 @@ class StoriesPage extends HookWidget {
       (context, read) {
         return read(storiesTypeProvider(type)).when(
           loading: () {
-            return LoadingStories();
+            return SliverToBoxAdapter(child: LoadingStories());
           },
           error: (err, stack) {
             print(err);
-            return Center(child: Text('Error: $err'));
+            return SliverToBoxAdapter(
+                child: Center(child: Text('Error: $err')));
           },
           data: (ids) {
             return StoryList(ids: ids);
