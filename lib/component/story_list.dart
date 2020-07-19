@@ -51,62 +51,27 @@ class StoryList extends HookWidget {
           return Consumer(
             (context, read) {
               return read(storyProvider(ids[index])).when(
-                  loading: () => LoadingStories(count: 1),
-                  error: (err, trace) => Text(err),
-                  data: (item) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 2,
-                      ),
-                      child: OpenContainer(
-                        tappable: true,
-                        closedElevation: 0,
-                        closedColor: Theme.of(context).scaffoldBackgroundColor,
-                        openColor: Theme.of(context).scaffoldBackgroundColor,
-                        transitionDuration: Duration(milliseconds: 500),
-                        closedBuilder: (BuildContext c, VoidCallback action) =>
-                            _getViewType(currentView.state, item),
-                        openBuilder: (BuildContext c, VoidCallback action) =>
-                            StoryPage(item: item),
-                      ),
-                    );
-                  });
+                loading: () => LoadingStories(count: 1),
+                error: (err, trace) => Text(err),
+                data: (item) {
+                  return OpenContainer(
+                    tappable: true,
+                    closedElevation: 0,
+                    closedColor: Theme.of(context).scaffoldBackgroundColor,
+                    openColor: Theme.of(context).scaffoldBackgroundColor,
+                    transitionDuration: Duration(milliseconds: 500),
+                    closedBuilder: (BuildContext c, VoidCallback action) =>
+                        _getViewType(currentView.state, item),
+                    openBuilder: (BuildContext c, VoidCallback action) =>
+                        StoryPage(item: item),
+                  );
+                },
+              );
             },
           );
         },
         childCount: ids.length,
       ),
-    );
-
-    return ListView.builder(
-      itemCount: ids.length,
-      itemBuilder: (context, index) {
-        return Consumer(
-          (context, read) {
-            return read(storyProvider(ids[index])).when(
-                loading: () => LoadingStories(count: 1),
-                error: (err, trace) => Text(err),
-                data: (item) {
-                  return Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-                    child: OpenContainer(
-                      tappable: true,
-                      closedElevation: 0,
-                      closedColor: Theme.of(context).scaffoldBackgroundColor,
-                      openColor: Theme.of(context).scaffoldBackgroundColor,
-                      transitionDuration: Duration(milliseconds: 500),
-                      closedBuilder: (BuildContext c, VoidCallback action) =>
-                          _getViewType(currentView.state, item),
-                      openBuilder: (BuildContext c, VoidCallback action) =>
-                          StoryPage(item: item),
-                    ),
-                  );
-                });
-          },
-        );
-      },
     );
   }
 }

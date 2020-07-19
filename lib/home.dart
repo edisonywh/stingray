@@ -198,25 +198,28 @@ class Home extends HookWidget {
             return SafeArea(
               top: false,
               bottom: false,
-              child: Builder(
-                builder: (context) {
-                  return CustomScrollView(
-                    key: PageStorageKey(type),
-                    slivers: <Widget>[
-                      SliverOverlapInjector(
-                        handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                          context,
+              child: Scaffold(
+                body: Builder(
+                  builder: (context) {
+                    return CustomScrollView(
+                      key: PageStorageKey(type),
+                      slivers: <Widget>[
+                        SliverOverlapInjector(
+                          handle:
+                              NestedScrollView.sliverOverlapAbsorberHandleFor(
+                            context,
+                          ),
                         ),
-                      ),
-                      SliverPadding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        sliver: StoriesPage(
-                          type: type,
-                        ),
-                      )
-                    ],
-                  );
-                },
+                        SliverPadding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          sliver: StoriesPage(
+                            type: type,
+                          ),
+                        )
+                      ],
+                    );
+                  },
+                ),
               ),
             );
           }).toList(),
