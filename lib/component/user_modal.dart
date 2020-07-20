@@ -25,67 +25,74 @@ class UserModal extends HookWidget {
       error: (err, stacktrace) => SafeArea(child: Center(child: Text("$err"))),
       data: (user) {
         return SafeArea(
-          child: CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Flex(
-                    direction: Axis.horizontal,
-                    children: [
-                      Expanded(
+          child: DraggableScrollableSheet(
+            expand: false,
+            maxChildSize: 1,
+            builder: (context, controller) {
+              return CustomScrollView(
+                controller: controller,
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Flex(
+                        direction: Axis.horizontal,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              "${user.id} (${user.karma})",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            user.since,
+                            style: Theme.of(context).textTheme.caption,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  if (user.about != null) ...[
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
                         child: Text(
-                          "${user.id} (${user.karma})",
+                          "About",
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
-                      Text(
-                        user.since,
-                        style: Theme.of(context).textTheme.caption,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              if (user.about != null) ...[
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      "About",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
+                    ),
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Html(
+                          data: user.about,
+                        ),
+                      ),
+                    ),
+                  ],
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        "Submissions",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Html(
-                      data: user.about,
-                    ),
-                  ),
-                ),
-              ],
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    "Submissions",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-              StoryList(ids: user.submitted),
-            ],
+                  StoryList(ids: user.submitted),
+                ],
+              );
+            },
           ),
         );
       },
