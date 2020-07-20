@@ -89,7 +89,10 @@ class UserModal extends HookWidget {
                       ),
                     ),
                   ),
-                  StoryList(ids: user.submitted),
+                  SliverPadding(
+                    padding: const EdgeInsets.all(8.0),
+                    sliver: StoryList(ids: user.submitted),
+                  ),
                 ],
               );
             },
