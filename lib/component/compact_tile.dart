@@ -47,13 +47,21 @@ class CompactTile extends StatelessWidget {
                           ),
                         ),
                         TextSpan(
-                          text: "  ${item.score} ",
+                          text: " ${item.score}",
                           style: Theme.of(context).textTheme.caption.copyWith(
                                 color: Theme.of(context).primaryColor,
                               ),
                         ),
                         TextSpan(
-                          text: " ${item.descendants}  ",
+                          text: " ${String.fromCharCode(8226)} ",
+                          style: Theme.of(context).textTheme.caption,
+                        ),
+                        TextSpan(
+                          text: "${item.descendants}",
+                          style: Theme.of(context).textTheme.caption,
+                        ),
+                        TextSpan(
+                          text: " ${String.fromCharCode(8226)} ",
                           style: Theme.of(context).textTheme.caption,
                         ),
                         TextSpan(
@@ -61,7 +69,11 @@ class CompactTile extends StatelessWidget {
                           style: Theme.of(context).textTheme.caption,
                         ),
                         TextSpan(
-                          text: ' ${item.ago}',
+                          text: " ${String.fromCharCode(8226)} ",
+                          style: Theme.of(context).textTheme.caption,
+                        ),
+                        TextSpan(
+                          text: '${item.ago}',
                           style: Theme.of(context).textTheme.caption,
                         ),
                       ],
