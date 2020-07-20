@@ -3,9 +3,11 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:stingray/model/item.dart';
+import 'package:stingray/model/user.dart';
 
 class Repo {
   static final _itemsCache = <int, Item>{};
+  static final _usersCache = <String, User>{};
 
   static const baseUrl = "https://hacker-news.firebaseio.com/v0";
 
@@ -99,6 +101,22 @@ class Repo {
         return _itemsCache[id] = Item.fromJson(response.body);
       } else {
         throw HackerNewsApiError('Item $id failed to fetch.');
+      }
+    }
+  }
+
+  static Future<User> fetchUser(String id) async {
+    if (_usersCache.containsKey(id)) {
+      return _usersCache[id];
+    } else {
+      String url = "$baseUrl/user/$id.json";
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        if (response.body == "null") return null;
+        return _usersCache[id] = User.fromJson(response.body);
+      } else {
+        throw HackerNewsApiError('User $id failed to fetch.');
       }
     }
   }

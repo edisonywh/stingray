@@ -40,32 +40,35 @@ class StoryList extends HookWidget {
   Widget build(BuildContext context) {
     final currentView = useProvider(viewProvider.state);
 
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          return Consumer(
-            (context, read) {
-              return read(storyProvider(ids[index])).when(
-                loading: () => LoadingItem(count: 1),
-                error: (err, trace) => Text("Error: $err"),
-                data: (item) {
-                  return OpenContainer(
-                    tappable: true,
-                    closedElevation: 0,
-                    closedColor: Theme.of(context).scaffoldBackgroundColor,
-                    openColor: Theme.of(context).scaffoldBackgroundColor,
-                    transitionDuration: Duration(milliseconds: 500),
-                    closedBuilder: (BuildContext c, VoidCallback action) =>
-                        _getViewType(currentView, item),
-                    openBuilder: (BuildContext c, VoidCallback action) =>
-                        StoryPage(item: item),
-                  );
-                },
-              );
-            },
-          );
-        },
-        childCount: ids.length,
+    return SliverPadding(
+      padding: const EdgeInsets.all(8.0),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            return Consumer(
+              (context, read) {
+                return read(storyProvider(ids[index])).when(
+                  loading: () => LoadingItem(count: 1),
+                  error: (err, trace) => Text("Error: $err"),
+                  data: (item) {
+                    return OpenContainer(
+                      tappable: true,
+                      closedElevation: 0,
+                      closedColor: Theme.of(context).scaffoldBackgroundColor,
+                      openColor: Theme.of(context).scaffoldBackgroundColor,
+                      transitionDuration: Duration(milliseconds: 500),
+                      closedBuilder: (BuildContext c, VoidCallback action) =>
+                          _getViewType(currentView, item),
+                      openBuilder: (BuildContext c, VoidCallback action) =>
+                          StoryPage(item: item),
+                    );
+                  },
+                );
+              },
+            );
+          },
+          childCount: ids.length,
+        ),
       ),
     );
   }

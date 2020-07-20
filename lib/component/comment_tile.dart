@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:stingray/helpers.dart';
 import 'package:stingray/model/item.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -104,7 +105,10 @@ class CommentTile extends HookWidget {
                   children: [
                     Row(
                       children: [
-                        _buildAuthor(context, comment),
+                        InkWell(
+                            onTap: () =>
+                                showUserModal(context, username: comment.by),
+                            child: _buildAuthor(context, comment)),
                         RichText(
                           text: TextSpan(
                             children: <TextSpan>[

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:stingray/model/item.dart';
 
@@ -18,61 +19,77 @@ class ItemTile extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: Text(
-                item.title,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
+            if (item.domain != "")
+              Text(
+                item.domain,
+                style: Theme.of(context).textTheme.caption,
               ),
+            if (item.type == StoryType.comment)
+              Text(
+                "Comment",
+                style: Theme.of(context).textTheme.caption,
+              ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8, bottom: 8.0),
+              child: item.type == StoryType.comment
+                  ? Html(data: item.text)
+                  : Text(
+                      item.title,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
             ),
             Row(
               children: [
                 Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 16.0),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Feather.arrow_up,
-                            size: 16,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(
-                              item.score.toString(),
-                              textAlign: TextAlign.center,
-                              style:
-                                  Theme.of(context).textTheme.caption.copyWith(
-                                        color: Theme.of(context).primaryColor,
-                                      ),
+                    if (item.type != StoryType.comment) ...[
+                      Padding(
+                        padding: const EdgeInsets.only(right: 16.0),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Feather.arrow_up,
+                              size: 16,
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 16.0),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Feather.message_square,
-                            size: 16,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(
-                              item.descendants.toString(),
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.caption,
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Text(
+                                item.score.toString(),
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .caption
+                                    .copyWith(
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 16.0),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Feather.message_square,
+                              size: 16,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Text(
+                                item.descendants.toString(),
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.caption,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                     Padding(
                       padding: const EdgeInsets.only(right: 16.0),
                       child: Row(

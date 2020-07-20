@@ -6,11 +6,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stingray/component/part_snippet.dart';
 import 'package:stingray/helpers.dart';
 import 'package:stingray/model/item.dart';
+import 'package:stingray/model/user.dart';
 import 'package:stingray/repo.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-final partsProvider = FutureProvider.family((ref, int parameter) async {
-  return await Repo.fetchItem(parameter);
+final partsProvider = FutureProvider.family((ref, int id) async {
+  return await Repo.fetchItem(id);
 });
 
 class StoryInformation extends HookWidget {
@@ -64,24 +65,29 @@ class StoryInformation extends HookWidget {
                   style: Theme.of(context).textTheme.caption,
                 ),
               ),
-            RichText(
-              text: TextSpan(
-                children: <TextSpan>[
-                  TextSpan(
-                    text: item.by,
-                    style: Theme.of(context).textTheme.caption.copyWith(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                  ),
-                  TextSpan(
-                    text: " ${String.fromCharCode(8226)} ",
-                    style: Theme.of(context).textTheme.caption,
-                  ),
-                  TextSpan(
-                    text: item.ago,
-                    style: Theme.of(context).textTheme.caption,
-                  ),
-                ],
+            InkWell(
+              onTap: () {
+                showUserModal(context, username: item.by);
+              },
+              child: RichText(
+                text: TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: item.by,
+                      style: Theme.of(context).textTheme.caption.copyWith(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                    ),
+                    TextSpan(
+                      text: " ${String.fromCharCode(8226)} ",
+                      style: Theme.of(context).textTheme.caption,
+                    ),
+                    TextSpan(
+                      text: item.ago,
+                      style: Theme.of(context).textTheme.caption,
+                    ),
+                  ],
+                ),
               ),
             ),
             if (item.text != "")
