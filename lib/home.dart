@@ -68,7 +68,14 @@ class Home extends HookWidget {
                 context,
               ),
               sliver: SliverAppBar(
-                title: const Text('Stingray'),
+                title: Text(
+                  'Stingray',
+                  style: TextStyle(
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Colors.black
+                        : Colors.white,
+                  ),
+                ),
                 pinned: true,
                 floating: true,
                 forceElevated: innerBoxIsScrolled,
@@ -162,22 +169,17 @@ class Home extends HookWidget {
                   isScrollable: true,
                   tabs: tabs.map((tab) {
                     return Tab(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
-                        child: Row(
-                          children: [
-                            Icon(
-                              tab.icon,
-                              size: 18,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: Text(tab.name),
-                            ),
-                          ],
-                        ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            tab.icon,
+                            size: 18,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Text(tab.name),
+                          ),
+                        ],
                       ),
                     );
                   }).toList(),
