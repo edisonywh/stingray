@@ -7,10 +7,6 @@ import 'package:stingray/component/story_list.dart';
 import 'package:stingray/model/item.dart';
 import 'package:stingray/repo.dart';
 
-final StateProvider<ViewType> viewProvider = StateProvider((ref) {
-  return ViewType.itemCard;
-});
-
 final storiesTypeProvider = FutureProvider.family((ref, type) async {
   return await Repo.getStories(type);
 });

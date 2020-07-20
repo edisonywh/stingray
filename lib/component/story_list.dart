@@ -9,12 +9,7 @@ import 'package:stingray/component/loading_item.dart';
 import 'package:stingray/model/item.dart';
 import 'package:stingray/page/stories_page.dart';
 import 'package:stingray/page/story_page.dart';
-
-enum ViewType {
-  compactTile,
-  itemCard,
-  itemTile,
-}
+import 'package:stingray/view_manager.dart';
 
 class StoryList extends HookWidget {
   const StoryList({
@@ -43,7 +38,7 @@ class StoryList extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentView = useProvider(viewProvider);
+    final currentView = useProvider(viewProvider.state);
 
     return SliverList(
       delegate: SliverChildBuilderDelegate(
@@ -52,9 +47,8 @@ class StoryList extends HookWidget {
             (context, read) {
               return read(storyProvider(ids[index])).when(
                 loading: () => LoadingItem(count: 1),
-                error: (err, trace) => Text(err),
+                error: (err, trace) => Text("Error: $err"),
                 data: (item) {
-                  // return LoadingItem(count: 1);
                   return OpenContainer(
                     tappable: true,
                     closedElevation: 0,
@@ -62,7 +56,7 @@ class StoryList extends HookWidget {
                     openColor: Theme.of(context).scaffoldBackgroundColor,
                     transitionDuration: Duration(milliseconds: 500),
                     closedBuilder: (BuildContext c, VoidCallback action) =>
-                        _getViewType(currentView.state, item),
+                        _getViewType(currentView, item),
                     openBuilder: (BuildContext c, VoidCallback action) =>
                         StoryPage(item: item),
                   );
