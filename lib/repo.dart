@@ -13,18 +13,31 @@ class Repo {
     return await _getIds(type);
   }
 
-  static Stream<int> lazyFetchComments({Item item, int depth = 0}) async* {
+  static Future<List<int>> getCommentsIds({Item item}) async {
+    Stream<Item> stream = lazyFetchComments(item: item, assignDepth: false);
+    List<int> comments = [];
+
+    await for (Item comment in stream) {
+      comments.add(comment.id);
+    }
+
+    return comments;
+  }
+
+  static Stream<Item> lazyFetchComments(
+      {Item item, int depth = 0, bool assignDepth = true}) async* {
     if (item.kids.isEmpty) return;
 
     for (int kidId in item.kids) {
       Item kid = await fetchItem(kidId);
+      if (kid == null) continue;
 
-      kid.depth = depth;
+      if (assignDepth) kid.depth = depth;
 
-      yield kid.id;
+      yield kid;
 
       Stream stream = lazyFetchComments(item: kid, depth: kid.depth + 1);
-      await for (int grandkid in stream) {
+      await for (Item grandkid in stream) {
         yield grandkid;
       }
     }
@@ -43,7 +56,9 @@ class Repo {
 
     await Future.wait(item.kids.map((kidId) async {
       Item kid = await fetchItem(kidId);
-      await prefetchComments(item: kid);
+      if (kid != null) {
+        await prefetchComments(item: kid);
+      }
     }));
 
     return Future.value(result);
@@ -80,6 +95,7 @@ class Repo {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
+        if (response.body == "null") return null;
         return _itemsCache[id] = Item.fromJson(response.body);
       } else {
         throw HackerNewsApiError('Item $id failed to fetch.');
