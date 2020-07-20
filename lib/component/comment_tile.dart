@@ -82,12 +82,13 @@ class CommentTile extends HookWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(left: comment.depth * 4.0),
-      child: Card(
-        shape: Border(
-          left: BorderSide(width: 3.0, color: indentColor(comment.depth)),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          border: Border(
+            left: BorderSide(width: 3.0, color: indentColor(comment.depth)),
+          ),
         ),
-        color: Theme.of(context).scaffoldBackgroundColor,
-        margin: EdgeInsets.zero,
         child: Padding(
           padding: const EdgeInsets.symmetric(
             vertical: 8,
