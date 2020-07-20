@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:stingray/component/loading_comment.dart';
+import 'package:stingray/component/loading_item.dart';
 import 'package:stingray/model/item.dart';
 
 class PartSnippet extends StatelessWidget {
@@ -19,7 +19,7 @@ class PartSnippet extends StatelessWidget {
         padding: const EdgeInsets.only(
           left: 4,
         ),
-        child: LoadingComment(),
+        child: LoadingItem(),
       ),
       error: (err, stack) {
         print(err);

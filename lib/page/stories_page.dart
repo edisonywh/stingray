@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:stingray/component/loading_stories.dart';
+import 'package:stingray/component/loading_item.dart';
 import 'package:stingray/component/story_list.dart';
 import 'package:stingray/model/item.dart';
 import 'package:stingray/repo.dart';
@@ -33,7 +33,9 @@ class StoriesPage extends HookWidget {
       (context, read) {
         return read(storiesTypeProvider(type)).when(
           loading: () {
-            return SliverToBoxAdapter(child: LoadingStories());
+            // return SliverFillRemaining(
+            // child: Center(child: CircularProgressIndicator()));
+            return SliverToBoxAdapter(child: Center(child: LoadingItem()));
           },
           error: (err, stack) {
             print(err);

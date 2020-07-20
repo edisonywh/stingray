@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stingray/component/compact_tile.dart';
 import 'package:stingray/component/item_card.dart';
 import 'package:stingray/component/item_tile.dart';
-import 'package:stingray/component/loading_stories.dart';
+import 'package:stingray/component/loading_item.dart';
 import 'package:stingray/model/item.dart';
 import 'package:stingray/page/stories_page.dart';
 import 'package:stingray/page/story_page.dart';
@@ -51,9 +51,10 @@ class StoryList extends HookWidget {
           return Consumer(
             (context, read) {
               return read(storyProvider(ids[index])).when(
-                loading: () => LoadingStories(count: 1),
+                loading: () => LoadingItem(count: 1),
                 error: (err, trace) => Text(err),
                 data: (item) {
+                  // return LoadingItem(count: 1);
                   return OpenContainer(
                     tappable: true,
                     closedElevation: 0,

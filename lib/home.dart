@@ -195,11 +195,9 @@ class Home extends HookWidget {
             StoriesType.askStories,
             StoriesType.jobStories
           ].map((type) {
-            return SafeArea(
-              top: false,
-              bottom: false,
-              child: Scaffold(
-                body: Builder(
+            return Scaffold(
+              body: SafeArea(
+                child: Builder(
                   builder: (context) {
                     return CustomScrollView(
                       key: PageStorageKey(type),
@@ -210,12 +208,15 @@ class Home extends HookWidget {
                             context,
                           ),
                         ),
-                        SliverPadding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          sliver: StoriesPage(
-                            type: type,
-                          ),
-                        )
+                        // SliverPadding(
+                        // padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        // sliver: StoriesPage(
+                        // type: type,
+                        // ),
+                        // )
+                        StoriesPage(
+                          type: type,
+                        ),
                       ],
                     );
                   },
