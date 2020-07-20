@@ -22,7 +22,7 @@ class ThemeManager extends StateNotifier<ThemeData> {
     if (themeName == "darkTheme") return darkTheme;
     if (themeName == "trueBlackTheme") return trueBlackTheme;
 
-    return null;
+    return darkTheme; // Default
   }
 
   String themeName(ThemeData theme) {

@@ -27,7 +27,7 @@ class ViewManager extends StateNotifier<ViewType> {
     if (viewName == "compactTile") return ViewType.compactTile;
     if (viewName == "itemTile") return ViewType.itemTile;
 
-    return null;
+    return ViewType.itemCard; // Default
   }
 
   String viewName(ViewType type) {
