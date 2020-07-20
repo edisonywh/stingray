@@ -27,6 +27,7 @@ class UserModal extends HookWidget {
         return SafeArea(
           child: DraggableScrollableSheet(
             expand: false,
+            initialChildSize: 1,
             maxChildSize: 1,
             builder: (context, controller) {
               return CustomScrollView(
@@ -40,17 +41,36 @@ class UserModal extends HookWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              "${user.id} (${user.karma})",
+                              user.id,
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
-                          Text(
-                            user.since,
-                            style: Theme.of(context).textTheme.caption,
-                          )
+                          RichText(
+                            text: TextSpan(
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: "${user.karma}",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .caption
+                                      .copyWith(
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                ),
+                                TextSpan(
+                                  text: " ${String.fromCharCode(8226)} ",
+                                  style: Theme.of(context).textTheme.caption,
+                                ),
+                                TextSpan(
+                                  text: user.since,
+                                  style: Theme.of(context).textTheme.caption,
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
