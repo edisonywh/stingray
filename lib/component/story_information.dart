@@ -6,7 +6,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stingray/component/part_snippet.dart';
 import 'package:stingray/helpers.dart';
 import 'package:stingray/model/item.dart';
-import 'package:stingray/model/user.dart';
 import 'package:stingray/repo.dart';
 import 'package:url_launcher/url_launcher.dart';
 

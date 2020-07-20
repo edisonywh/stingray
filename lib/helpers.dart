@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share/share.dart';
-import 'package:stingray/component/story_information.dart';
 import 'package:stingray/component/user_modal.dart';
-import 'package:stingray/model/user.dart';
-import 'package:stingray/repo.dart';
 
 void handleShare(int id) {
   String url = "https://news.ycombinator.com/item?id=$id";
