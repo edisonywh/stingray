@@ -40,8 +40,17 @@ dependency_overrides:
   flutter_svg: 0.18.0
 
 dev_dependencies:
+  flutter_launcher_icons: "^0.7.3"
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: true
+  adaptive_icon_background: "#FFA826"
+  adaptive_icon_foreground: "assets/icon/android-foreground-icon.png"
+
+  ios: true
+  image_path: "assets/icon/icon.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
