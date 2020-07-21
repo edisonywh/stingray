@@ -11,6 +11,8 @@ Stingray is a new, modern, beautiful Hacker News reader app.
   <img height="400px;" src="./screenshots/collapse.png">
 </div>
 
+> Images made with [previewed.app](previewed.app)
+
 There are a bunch of nice looking Reddit apps, but I have not been able to find similarly nice looking one for Hacker News, so I decided to try my hands at one using Flutter.
 
 Right now it's pretty basic, it's missing a couple of features such as:
