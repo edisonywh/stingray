@@ -1,16 +1,25 @@
-# stingray
+# Stingray
 
-A new Flutter project.
+Stingray is a new, modern, beautiful Hacker News reader app.
 
-## Getting Started
+![featured image](./screenshots/featured.png)
 
-This project is a starting point for a Flutter application.
+<img style="height: 300px;" src="./screenshots/browse.png">
+<img style="height: 300px;" src="./screenshots/customize.png">
+<img style="height: 300px;" src="./screenshots/dark.png">
+<img style="height: 300px;" src="./screenshots/collapse.png">
 
-A few resources to get you started if this is your first Flutter project:
+There are a bunch of nice looking Reddit apps, but I have not been able to find similarly nice looking one for Hacker News, so I decided to try my hands at one using Flutter.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Right now it's pretty basic, it's missing a couple of features such as:
+- No refresh
+- No login
+- No upvote
+- No reply
+- No submission
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Most of them are related to login/auth (Hacker News does not have an API for it), but there exists some solution to hack around it, for reference:
+- https://swizec.com/blog/reverse-engineered-hacker-news/swizec/7741
+- https://github.com/hidroh/materialistic
+
+Contributions are welcomed!
