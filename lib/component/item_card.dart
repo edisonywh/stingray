@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:stingray/history.dart';
 import 'package:stingray/model/item.dart';
 
 class ItemCard extends StatelessWidget {
@@ -53,6 +54,9 @@ class ItemCard extends StatelessWidget {
                           Icon(
                             Feather.arrow_up,
                             size: 16,
+                            color: item.isVoted()
+                                ? Theme.of(context).primaryColor
+                                : Theme.of(context).iconTheme.color,
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 8.0),

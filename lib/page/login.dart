@@ -22,7 +22,6 @@ class LoginPage extends HookWidget {
               child: TextFormField(
                 autocorrect: false,
                 onChanged: (value) {
-                  _formKey.currentState.validate();
                   username.value = value;
                 },
                 decoration: InputDecoration(
@@ -46,7 +45,6 @@ class LoginPage extends HookWidget {
               child: TextFormField(
                 autocorrect: false,
                 onChanged: (value) {
-                  _formKey.currentState.validate();
                   password.value = value;
                 },
                 obscureText: true,

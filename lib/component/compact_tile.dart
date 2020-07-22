@@ -47,9 +47,11 @@ class CompactTile extends StatelessWidget {
                           ),
                         ),
                         TextSpan(
-                          text: " ${item.score}",
+                          text: "  ${item.score}p",
                           style: Theme.of(context).textTheme.caption.copyWith(
-                                color: Theme.of(context).primaryColor,
+                                color: item.isVoted()
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context).iconTheme.color,
                               ),
                         ),
                         TextSpan(

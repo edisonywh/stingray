@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stingray/history.dart';
 import 'package:stingray/home.dart';
 import 'package:stingray/theme.dart';
 import 'package:stingray/view_manager.dart';
@@ -21,6 +22,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   timeago.setLocaleMessages('en', CustomEn());
+
+  await HistoryManager.init();
+
   SharedPreferences pref = await SharedPreferences.getInstance();
 
   String themeName = pref.getString('theme');

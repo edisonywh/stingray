@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:stingray/model/item.dart';
 import 'package:stingray/page/profile.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -121,6 +122,17 @@ class CommentTile extends HookWidget {
                                           ProfilePage(username: comment.by)),
                                 ),
                             child: _buildAuthor(context, comment)),
+                        if (comment.isVoted()) ...[
+                          Text(
+                            " ${String.fromCharCode(8226)}",
+                            style: Theme.of(context).textTheme.caption,
+                          ),
+                          Icon(
+                            Feather.arrow_up,
+                            size: 14,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ],
                         RichText(
                           text: TextSpan(
                             children: <TextSpan>[

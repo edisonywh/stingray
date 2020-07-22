@@ -52,6 +52,9 @@ class ItemTile extends StatelessWidget {
                         Icon(
                           Feather.arrow_up,
                           size: 16,
+                          color: item.isVoted()
+                              ? Theme.of(context).primaryColor
+                              : Theme.of(context).iconTheme.color,
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0),

@@ -38,6 +38,12 @@ dependencies:
   shared_preferences: ^0.5.8
   state_notifier: ^0.5.0
   flutter_secure_storage: ^3.3.3
+  flutter_slidable: "^0.5.5"
+  hive: ^1.4.1+1
+  hive_flutter:
+    git:
+        url: https://github.com/hivedb/hive.git
+        path: hive_flutter
 
 dependency_overrides:
   flutter_svg: 0.18.0

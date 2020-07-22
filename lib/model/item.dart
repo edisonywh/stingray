@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:stingray/history.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 enum StoryType {
@@ -58,6 +59,8 @@ class Item {
   factory Item.fromJson(String str) => Item.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
+
+  bool isVoted() => HistoryManager.isVoted(id);
 
   String get domain => Uri.parse(url)?.host;
   String get ago =>

@@ -37,6 +37,36 @@ class Auth {
     return await storage.read(key: "username");
   }
 
+  static Future<AuthResult> vote({String itemId}) async {
+    final url = "$baseUrl/vote";
+    if (!await isLoggedIn())
+      return AuthResult(
+          message: "You must be logged in to vote", result: Result.error);
+
+    final storage = new FlutterSecureStorage();
+    String username = await storage.read(key: "username");
+    String password = await storage.read(key: "password");
+
+    Map body = {
+      "acct": username,
+      "pw": password,
+      "id": itemId,
+      "how": "up", // `up` is upvote, `un` is unvote
+    };
+
+    final response = await http.post(
+      url,
+      body: body,
+    );
+
+    // If we get a 302 we assume it's successful
+    if (response.statusCode == 302) {
+      return AuthResult(message: "Vote success", result: Result.ok);
+    } else {
+      return AuthResult(message: "Vote failed", result: Result.error);
+    }
+  }
+
   static Future<bool> logout() async {
     final storage = new FlutterSecureStorage();
 
