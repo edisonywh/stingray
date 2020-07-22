@@ -37,6 +37,7 @@ dependencies:
   flutter_html: ^1.0.0
   shared_preferences: ^0.5.8
   state_notifier: ^0.5.0
+  flutter_secure_storage: ^3.3.3
 
 dependency_overrides:
   flutter_svg: 0.18.0

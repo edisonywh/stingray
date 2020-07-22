@@ -35,15 +35,18 @@ class ThemeManager extends StateNotifier<ThemeData> {
 }
 
 ThemeData lightTheme = ThemeData.light().copyWith(
+  scaffoldBackgroundColor: Colors.white,
   primaryColor: Color(0xFFFFA826),
   accentColor: Color(0xFFFFA826),
   indicatorColor: Color(0xFFFFA826),
   toggleableActiveColor: Color(0xFFFFA826),
+  primaryTextTheme: TextTheme(headline6: TextStyle(color: Colors.black)),
   tabBarTheme: ThemeData().tabBarTheme.copyWith(
         unselectedLabelColor: Colors.grey,
         labelColor: Color(0xFFFFA826),
       ),
   appBarTheme: ThemeData().appBarTheme.copyWith(
+        elevation: 0,
         color: Colors.white,
         iconTheme: ThemeData().iconTheme.copyWith(color: Colors.black),
       ),
@@ -65,6 +68,7 @@ ThemeData darkTheme = ThemeData.dark().copyWith(
         color: Color(0xFF1C1C1C),
       ),
   appBarTheme: ThemeData().appBarTheme.copyWith(
+        elevation: 0,
         color: Color(0xFF1F1F1F),
       ),
   visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -81,6 +85,7 @@ ThemeData trueBlackTheme = ThemeData.dark().copyWith(
         color: Color(0xFF1C1C1C),
       ),
   appBarTheme: ThemeData().appBarTheme.copyWith(
+        elevation: 0,
         color: Colors.black,
       ),
   visualDensity: VisualDensity.adaptivePlatformDensity,

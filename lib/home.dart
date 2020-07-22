@@ -7,8 +7,7 @@ import 'package:stingray/deeplink_handler.dart';
 import 'package:stingray/model/item.dart';
 import 'package:stingray/page/stories_page.dart';
 import 'package:stingray/repo.dart';
-import 'package:stingray/theme.dart';
-import 'package:stingray/view_manager.dart';
+import 'package:stingray/page/settings.dart';
 
 final FutureProvider newStories = FutureProvider((ref) async {
   return await Repo.getStories(StoriesType.newStories);
@@ -52,11 +51,6 @@ class Home extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentView = useProvider(viewProvider.state);
-    final ViewManager viewManager = useProvider(viewProvider);
-    final currentTheme = useProvider(themeProvider.state);
-    final ThemeManager themeManager = useProvider(themeProvider);
-
     useMemoized(() => DeeplinkHandler.init(context));
     useEffect(() => DeeplinkHandler.cancel, const []);
 
@@ -82,90 +76,13 @@ class Home extends HookWidget {
                 floating: true,
                 forceElevated: innerBoxIsScrolled,
                 actions: [
-                  Consumer((context, read) {
-                    return IconButton(
-                      onPressed: () => showDialog(
-                        context: context,
-                        builder: (context) {
-                          return SimpleDialog(
-                            title: Text("Theme"),
-                            children: [
-                              RadioListTile(
-                                title: const Text('Light'),
-                                value: lightTheme,
-                                groupValue: currentTheme,
-                                onChanged: (value) {
-                                  themeManager.setTheme(value);
-                                  Navigator.pop(context);
-                                },
-                              ),
-                              RadioListTile(
-                                title: const Text('Dark'),
-                                value: darkTheme,
-                                groupValue: currentTheme,
-                                onChanged: (value) {
-                                  themeManager.setTheme(value);
-                                  Navigator.pop(context);
-                                },
-                              ),
-                              RadioListTile(
-                                title: const Text('True Black'),
-                                value: trueBlackTheme,
-                                groupValue: currentTheme,
-                                onChanged: (value) {
-                                  themeManager.setTheme(value);
-                                  Navigator.pop(context);
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                      icon: Icon(
-                        Feather.moon,
-                      ),
-                    );
-                  }),
                   IconButton(
-                    onPressed: () => showDialog(
-                        context: context,
-                        builder: (context) {
-                          return SimpleDialog(
-                              title: Text("Customize view"),
-                              children: <Widget>[
-                                RadioListTile(
-                                  title: const Text('Card'),
-                                  value: ViewType.itemCard,
-                                  groupValue: currentView,
-                                  onChanged: (value) {
-                                    viewManager.setView(value);
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                                RadioListTile(
-                                  title: const Text('Compact'),
-                                  value: ViewType.compactTile,
-                                  groupValue: currentView,
-                                  onChanged: (value) {
-                                    viewManager.setView(value);
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                                RadioListTile(
-                                  title: const Text('Tile'),
-                                  value: ViewType.itemTile,
-                                  groupValue: currentView,
-                                  onChanged: (value) {
-                                    viewManager.setView(value);
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ]);
-                        }),
-                    icon: Icon(
-                      Feather.grid,
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SettingsPage()),
                     ),
-                  )
+                    icon: Icon(Feather.settings),
+                  ),
                 ],
                 bottom: TabBar(
                   isScrollable: true,
@@ -220,9 +137,6 @@ class Home extends HookWidget {
                             type: type,
                           ),
                         )
-                        // StoriesPage(
-                        // type: type,
-                        // ),
                       ],
                     );
                   },

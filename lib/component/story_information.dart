@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stingray/component/part_snippet.dart';
 import 'package:stingray/helpers.dart';
 import 'package:stingray/model/item.dart';
+import 'package:stingray/page/profile.dart';
 import 'package:stingray/repo.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -66,7 +67,11 @@ class StoryInformation extends HookWidget {
               ),
             InkWell(
               onTap: () {
-                showUserModal(context, username: item.by);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ProfilePage(username: item.by)),
+                );
               },
               child: RichText(
                 text: TextSpan(

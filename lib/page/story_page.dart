@@ -18,14 +18,7 @@ class StoryPage extends HookWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Stingray',
-          style: TextStyle(
-            color: Theme.of(context).brightness == Brightness.light
-                ? Colors.black
-                : Colors.white,
-          ),
-        ),
+        title: Text('Stingray'),
         actions: [
           if (item.parent != null)
             IconButton(
