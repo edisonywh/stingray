@@ -19,12 +19,12 @@ class CommentTile extends HookWidget {
 
   Color indentColor(int depth) {
     List<Color> colors = [
-      Colors.lightBlue.shade900,
-      Colors.pink.shade900,
-      Colors.yellow.shade900,
-      Colors.green.shade900,
-      Colors.purple.shade900,
-      Colors.red.shade900,
+      Colors.lightBlue,
+      Colors.pink,
+      Colors.yellow,
+      Colors.green,
+      Colors.purple,
+      Colors.red,
     ];
 
     int index = depth % colors.length;
@@ -81,29 +81,37 @@ class CommentTile extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: comment.depth * 4.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          border: Border(
-            left: BorderSide(width: 3.0, color: indentColor(comment.depth)),
+    return Stack(
+      children: [
+        Positioned.fill(
+          top: 0,
+          left: 0,
+          right: 0,
+          child: Row(
+            children: List.generate(comment.depth, (i) => i)
+                .map((d) => Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Container(width: 2, color: indentColor(d)),
+                    ))
+                .toList(),
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 8,
-            horizontal: 16.0,
+        Padding(
+          padding: EdgeInsets.only(
+            top: 16,
+            left: 18.0 * comment.depth,
+            right: 16,
+            bottom: 8,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 4.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
+              Flex(
+                direction: Axis.horizontal,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
                       children: [
                         InkWell(
                             onTap: () => Navigator.push(
@@ -129,27 +137,28 @@ class CommentTile extends HookWidget {
                         ),
                       ],
                     ),
-                    if (isCollapsed && comment.kids.isNotEmpty)
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).accentColor,
-                          borderRadius: BorderRadius.circular(4),
+                  ),
+                  Spacer(),
+                  if (isCollapsed && comment.kids.isNotEmpty)
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).accentColor,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
-                          ),
-                          child: Text(
-                            "+${comment.kids.length}",
-                            style: Theme.of(context).textTheme.caption.copyWith(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                          ),
+                        child: Text(
+                          "+${comment.kids.length}",
+                          style: Theme.of(context).textTheme.caption.copyWith(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                              ),
                         ),
                       ),
-                  ],
-                ),
+                    ),
+                ],
               ),
               Html(
                 data: comment.text,
@@ -158,7 +167,7 @@ class CommentTile extends HookWidget {
             ],
           ),
         ),
-      ),
+      ],
     );
   }
 }
