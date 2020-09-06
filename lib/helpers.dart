@@ -5,12 +5,25 @@ import 'package:stingray/history.dart';
 import 'package:stingray/model/item.dart';
 
 void handleShare(int id) {
-  String url = "https://news.ycombinator.com/item?id=$id";
+  String hnUrl = buildHackerNewsURL(id);
 
   String text =
-      "Hey, check out this Hacker News story that I read via Stingray!\r\r $url";
+      "Hey, check out this Hacker News story that I read via Stingray!\r\r $hnUrl";
 
   Share.share(text);
+}
+
+void handleShare(int id, String title, String postUrl) {
+  String hnUrl = buildHackerNewsURL(id);
+
+  String text =
+      "Read it on Hacker News: $hnUrl \r\r or go straight to the article: $postUrl";
+
+  Share.share(text, subject: $title);
+}
+
+String buildHackerNewsURL(int id) {
+  return "https://news.ycombinator.com/item?id=$id";
 }
 
 void handleUpvote(context, {Item item}) async {
