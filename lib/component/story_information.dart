@@ -161,7 +161,7 @@ class StoryInformation extends HookWidget {
                   icon: Icon(
                     Feather.share_2,
                   ),
-                  onPressed: () => handleShare(item.id),
+                  onPressed: () => handleShare(item.id, item.title, item.url),
                 ),
               ],
             ),
