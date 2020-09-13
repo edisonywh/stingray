@@ -4,16 +4,7 @@ import 'package:stingray/auth.dart';
 import 'package:stingray/history.dart';
 import 'package:stingray/model/item.dart';
 
-void handleShare(int id) {
-  String hnUrl = buildHackerNewsURL(id);
-
-  String text =
-      "Hey, check out this Hacker News story that I read via Stingray!\r\r $hnUrl";
-
-  Share.share(text);
-}
-
-void handleShare(int id, String title, String postUrl) {
+void handleShare({int id, String title, String postUrl}) {
   String hnUrl = buildHackerNewsURL(id);
 
   String text =
