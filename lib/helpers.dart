@@ -10,7 +10,7 @@ void handleShare({int id, String title, String postUrl}) {
   String text =
       "Read it on Hacker News: $hnUrl \r\r or go straight to the article: $postUrl";
 
-  Share.share(text, subject: $title);
+  Share.share(text, subject: title);
 }
 
 String buildHackerNewsURL(int id) {
