@@ -77,7 +77,7 @@ class Repo {
 
     final url = "$baseUrl/$typeQuery.json";
 
-    final response = await http.get(url);
+    final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
       List<int> itemIds = List<int>.from(jsonDecode(response.body));
@@ -94,7 +94,7 @@ class Repo {
       // For some weird reason, sometimes the API returns "null".
       // e.g: "https://hacker-news.firebaseio.com/v0/item/23829504.json"
       String url = "$baseUrl/item/$id.json";
-      final response = await http.get(url);
+      final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
         if (response.body == "null") return null;
@@ -110,7 +110,7 @@ class Repo {
       return _usersCache[id];
     } else {
       String url = "$baseUrl/user/$id.json";
-      final response = await http.get(url);
+      final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
         if (response.body == "null") return null;

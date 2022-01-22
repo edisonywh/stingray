@@ -26,8 +26,8 @@ class StoriesPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer(
-      (context, read) {
-        return read(storiesTypeProvider(type)).when(
+      builder: (context, ref, child) {
+        return ref.read(storiesTypeProvider(type)).when(
           loading: () {
             // return SliverFillRemaining(
             // child: Center(child: CircularProgressIndicator()));

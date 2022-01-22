@@ -55,7 +55,7 @@ class Auth {
     };
 
     final response = await http.post(
-      url,
+      Uri.parse(url),
       body: body,
     );
 
@@ -85,7 +85,7 @@ class Auth {
     };
 
     final response = await http.post(
-      url,
+      Uri.parse(url),
       body: body,
     );
 

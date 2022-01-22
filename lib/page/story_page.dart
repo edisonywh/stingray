@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:stingray/component/comment_list.dart';
 import 'package:stingray/component/story_information.dart';
 import 'package:stingray/model/item.dart';

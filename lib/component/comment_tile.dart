@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:stingray/model/item.dart';
 import 'package:stingray/page/profile.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -54,7 +54,7 @@ class CommentTile extends HookWidget {
     if (comment.by == author) {
       return Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).accentColor,
+          color: Theme.of(context).colorScheme.secondary,
           borderRadius: BorderRadius.circular(4),
         ),
         child: Padding(
@@ -154,7 +154,7 @@ class CommentTile extends HookWidget {
                   if (isCollapsed && comment.kids.isNotEmpty)
                     Container(
                       decoration: BoxDecoration(
-                        color: Theme.of(context).accentColor,
+                        color: Theme.of(context).colorScheme.secondary,
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Padding(
@@ -174,7 +174,7 @@ class CommentTile extends HookWidget {
               ),
               Html(
                 data: comment.text,
-                onLinkTap: (url) => launchUrl(url),
+                onLinkTap: (url, _, __, ___) => launchUrl(url),
               ),
             ],
           ),

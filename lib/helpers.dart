@@ -24,7 +24,8 @@ void handleUpvote(context, {Item item}) async {
   if (result.result == Result.error) {
     HistoryManager.removeFromVoteCache(
         item.id); // ToDO: The UI won't update when we remove from cache here.
-    Scaffold.of(context).showSnackBar(SnackBar(content: Text(result.message)));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(result.message)));
   } else if (result.result == Result.ok) {
     await HistoryManager.markAsVoted(item.id);
   }

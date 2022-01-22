@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_icons/flutter_icons.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stingray/component/part_snippet.dart';
 import 'package:stingray/helpers.dart';
@@ -14,7 +13,7 @@ final partsProvider = FutureProvider.family((ref, int id) async {
   return await Repo.fetchItem(id);
 });
 
-class StoryInformation extends HookWidget {
+class StoryInformation extends HookConsumerWidget {
   const StoryInformation({
     Key key,
     @required this.item,
@@ -31,8 +30,8 @@ class StoryInformation extends HookWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final parts = item.parts.map((i) => useProvider(partsProvider(i))).toList();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final parts = item.parts.map((i) => ref.watch(partsProvider(i))).toList();
 
     return Container(
       color: Theme.of(context).scaffoldBackgroundColor,
@@ -97,7 +96,7 @@ class StoryInformation extends HookWidget {
             if (item.text != "")
               Html(
                 data: item.text,
-                onLinkTap: (url) => launchUrl(url),
+                onLinkTap: (url, _, __, ___) => launchUrl(url),
               ),
             if (item.parts.isNotEmpty)
               Padding(
@@ -161,7 +160,8 @@ class StoryInformation extends HookWidget {
                   icon: Icon(
                     Feather.share_2,
                   ),
-                  onPressed: () => handleShare(id: item.id, title: item.title, postUrl: item.url),
+                  onPressed: () => handleShare(
+                      id: item.id, title: item.title, postUrl: item.url),
                 ),
               ],
             ),

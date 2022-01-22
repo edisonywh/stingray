@@ -68,8 +68,10 @@ class LoginPage extends HookWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Builder(
                     builder: (context) {
-                      return RaisedButton(
-                        color: Theme.of(context).primaryColor,
+                      return ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Theme.of(context).primaryColor,
+                        ),
                         onPressed: () async {
                           if (_formKey.currentState.validate()) {
                             submitting.value = true;
@@ -79,7 +81,7 @@ class LoginPage extends HookWidget {
                             );
 
                             if (result.result == Result.error) {
-                              Scaffold.of(context).showSnackBar(
+                              ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(result.message),
                                 ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stingray/component/comment_tile.dart';
@@ -76,27 +76,26 @@ class CommentList extends HookWidget {
                       : Slidable(
                           key: Key(comment.id.toString()),
                           closeOnScroll: true,
-                          actionPane: SlidableScrollActionPane(),
-                          actions: <Widget>[
-                            IconSlideAction(
-                              color: Colors.deepOrangeAccent,
-                              icon: Feather.arrow_up_circle,
-                              onTap: () {
+                          startActionPane: ActionPane(
+                            motion: const DrawerMotion(),
+                            extentRatio: 0.25,
+                            children: [
+                              SlidableAction(
+                                backgroundColor: Colors.deepOrangeAccent,
+                                icon: Feather.arrow_up_circle,
+                                onPressed: (context) {
+                                  handleUpvote(context, item: comment);
+                                },
+                              ),
+                            ],
+                            dismissible: DismissiblePane(
+                              onDismissed: () {
                                 handleUpvote(context, item: comment);
+                                return false;
                               },
+                              dismissThreshold: 0.2,
+                              closeOnCancel: true,
                             ),
-                          ],
-                          dismissal: SlidableDismissal(
-                            closeOnCanceled: true,
-                            dismissThresholds: {
-                              SlideActionType.primary: 0.2,
-                              SlideActionType.secondary: 0.2,
-                            },
-                            child: SlidableDrawerDismissal(),
-                            onWillDismiss: (actionType) {
-                              handleUpvote(context, item: comment);
-                              return false;
-                            },
                           ),
                           child: CommentTile(
                             comment: comments.value[index],

@@ -1,6 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:state_notifier/state_notifier.dart';
 
 enum ViewType {
   compactTile,
@@ -9,7 +8,7 @@ enum ViewType {
 }
 
 // ignore: top_level_function_literal_block
-final viewProvider = StateNotifierProvider((ref) {
+final viewProvider = StateNotifierProvider<ViewManager, ViewType>((ref) {
   return ViewManager();
 });
 

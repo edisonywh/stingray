@@ -18,7 +18,7 @@ class DeeplinkHandler {
     // Platform messages are asynchronous, so we initialize in an async method.
     /// An implementation using a [Uri] link
     // Attach a listener to the links stream
-    _sub = getUriLinksStream().listen((Uri uri) async {
+    _sub = uriLinkStream.listen((Uri uri) async {
       try {
         if (uri != null) {
           launchDeeplink(context, uri);
