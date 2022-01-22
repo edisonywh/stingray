@@ -15,7 +15,7 @@ class Repo {
     return await _getIds(type);
   }
 
-  static Future<List<int>> getCommentsIds({Item item}) async {
+  static Future<List<int>> getCommentsIds({required Item item}) async {
     Stream<Item> stream = lazyFetchComments(item: item, assignDepth: false);
     List<int> comments = [];
 
@@ -26,18 +26,17 @@ class Repo {
     return comments;
   }
 
-  static Stream<Item> lazyFetchComments(
-      {Item item, int depth = 0, bool assignDepth = true}) async* {
+  static Stream<Item> lazyFetchComments({
+    required Item item,
+    int depth = 0,
+    bool assignDepth = true,
+  }) async* {
     if (item.kids.isEmpty) return;
 
     for (int kidId in item.kids) {
       Item kid = await fetchItem(kidId);
-      if (kid == null) continue;
-
       if (assignDepth) kid.depth = depth;
-
       yield kid;
-
       Stream stream = lazyFetchComments(item: kid, depth: kid.depth + 1);
       await for (Item grandkid in stream) {
         yield grandkid;
@@ -51,22 +50,20 @@ class Repo {
   /// This mostly exists so that I can fetch items async,
   /// put them in a cache, so that later I can retrieve them
   /// in a sorted order.
-  static Future<List<Item>> prefetchComments({Item item}) async {
+  static Future<List<Item>> prefetchComments({required Item item}) async {
     List<Item> result = [];
-    if (item.parent != null) result.add(item);
+    result.add(item);
     if (item.kids.isEmpty) return Future.value(result);
 
     await Future.wait(item.kids.map((kidId) async {
       Item kid = await fetchItem(kidId);
-      if (kid != null) {
-        await prefetchComments(item: kid);
-      }
+      await prefetchComments(item: kid);
     }));
 
     return Future.value(result);
   }
 
-  static Future<List<Item>> fetchByIds(List<int> ids) async {
+  static Future<List<Item?>> fetchByIds(List<int> ids) async {
     return Future.wait(ids.map((itemId) {
       return fetchItem(itemId);
     }));
@@ -89,7 +86,7 @@ class Repo {
 
   static Future<Item> fetchItem(int id) async {
     if (_itemsCache.containsKey(id)) {
-      return _itemsCache[id];
+      return _itemsCache[id]!;
     } else {
       // For some weird reason, sometimes the API returns "null".
       // e.g: "https://hacker-news.firebaseio.com/v0/item/23829504.json"
@@ -97,7 +94,8 @@ class Repo {
       final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
-        if (response.body == "null") return null;
+        if (response.body == "null")
+          HackerNewsApiError('Item $id failed to fetch.');
         return _itemsCache[id] = Item.fromJson(response.body);
       } else {
         throw HackerNewsApiError('Item $id failed to fetch.');
@@ -107,13 +105,14 @@ class Repo {
 
   static Future<User> fetchUser(String id) async {
     if (_usersCache.containsKey(id)) {
-      return _usersCache[id];
+      return _usersCache[id]!;
     } else {
       String url = "$baseUrl/user/$id.json";
       final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
-        if (response.body == "null") return null;
+        if (response.body == "null")
+          throw HackerNewsApiError('User $id failed to fetch.');
         return _usersCache[id] = User.fromJson(response.body);
       } else {
         throw HackerNewsApiError('User $id failed to fetch.');
@@ -127,19 +126,14 @@ class Repo {
         return "beststories";
       case StoriesType.newStories:
         return "newstories";
-        break;
       case StoriesType.topStories:
         return "topstories";
-        break;
       case StoriesType.askStories:
         return "askstories";
-        break;
       case StoriesType.showStories:
         return "showstories";
-        break;
       case StoriesType.jobStories:
         return "jobstories";
-        break;
       default:
         return "none";
     }

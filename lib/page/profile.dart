@@ -7,7 +7,7 @@ import 'package:stingray/component/story_list.dart';
 import 'package:stingray/model/user.dart';
 
 class ProfilePage extends HookConsumerWidget {
-  ProfilePage({this.username, this.isMe = false});
+  ProfilePage({required this.username, this.isMe = false});
 
   final String username;
   final bool isMe;
@@ -36,7 +36,7 @@ class ProfilePage extends HookConsumerWidget {
                           child: Text(
                             "Cancel",
                             style: TextStyle(
-                              color: Theme.of(context).textTheme.caption.color,
+                              color: Theme.of(context).textTheme.caption?.color,
                             ),
                           ),
                         ),
@@ -81,7 +81,7 @@ class ProfilePage extends HookConsumerWidget {
                                 style: Theme.of(context)
                                     .textTheme
                                     .caption
-                                    .copyWith(
+                                    ?.copyWith(
                                       color: Theme.of(context).primaryColor,
                                     ),
                               ),

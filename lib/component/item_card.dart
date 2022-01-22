@@ -5,8 +5,8 @@ import 'package:stingray/model/item.dart';
 
 class ItemCard extends StatelessWidget {
   const ItemCard({
-    Key key,
-    @required this.item,
+    Key? key,
+    required this.item,
   }) : super(key: key);
 
   final Item item;
@@ -63,7 +63,7 @@ class ItemCard extends StatelessWidget {
                               item.score.toString(),
                               textAlign: TextAlign.center,
                               style:
-                                  Theme.of(context).textTheme.caption.copyWith(
+                                  Theme.of(context).textTheme.caption?.copyWith(
                                         color: Theme.of(context).primaryColor,
                                       ),
                             ),

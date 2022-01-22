@@ -6,8 +6,8 @@ import 'package:stingray/model/item.dart';
 
 class PartSnippet extends StatelessWidget {
   const PartSnippet({
-    Key key,
-    @required this.part,
+    Key? key,
+    required this.part,
   }) : super(key: key);
 
   final AsyncValue<Item> part;

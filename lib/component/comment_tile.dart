@@ -8,9 +8,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 class CommentTile extends HookWidget {
   const CommentTile({
-    Key key,
-    @required this.comment,
-    @required this.author,
+    Key? key,
+    required this.comment,
+    required this.author,
     this.isCollapsed = false,
   }) : super(key: key);
 
@@ -45,7 +45,7 @@ class CommentTile extends HookWidget {
     if (comment.deleted) {
       return Text(
         "<deleted>",
-        style: Theme.of(context).textTheme.caption.copyWith(
+        style: Theme.of(context).textTheme.caption?.copyWith(
               fontStyle: FontStyle.italic,
             ),
       );
@@ -63,7 +63,7 @@ class CommentTile extends HookWidget {
           ),
           child: Text(
             comment.by,
-            style: Theme.of(context).textTheme.caption.copyWith(
+            style: Theme.of(context).textTheme.caption?.copyWith(
                   color: Colors.black,
                   fontWeight: FontWeight.w600,
                 ),
@@ -74,7 +74,7 @@ class CommentTile extends HookWidget {
 
     return Text(
       comment.by,
-      style: Theme.of(context).textTheme.caption.copyWith(
+      style: Theme.of(context).textTheme.caption?.copyWith(
             fontWeight: FontWeight.w500,
           ),
     );
@@ -163,7 +163,7 @@ class CommentTile extends HookWidget {
                         ),
                         child: Text(
                           "+${comment.kids.length}",
-                          style: Theme.of(context).textTheme.caption.copyWith(
+                          style: Theme.of(context).textTheme.caption?.copyWith(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w600,
                               ),

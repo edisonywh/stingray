@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// ignore: top_level_function_literal_block
 final themeProvider = StateNotifierProvider<ThemeManager, ThemeData>((ref) {
   return ThemeManager();
 });
@@ -16,20 +15,18 @@ class ThemeManager extends StateNotifier<ThemeData> {
     state = theme;
   }
 
-  static ThemeData fromThemeName(String themeName) {
+  static ThemeData fromThemeName(String? themeName) {
     if (themeName == "lightTheme") return lightTheme;
     if (themeName == "darkTheme") return darkTheme;
     if (themeName == "trueBlackTheme") return trueBlackTheme;
-
-    return darkTheme; // Default
+    return darkTheme;
   }
 
   String themeName(ThemeData theme) {
     if (theme == lightTheme) return "lightTheme";
     if (theme == darkTheme) return "darkTheme";
     if (theme == trueBlackTheme) return "trueBlackTheme";
-
-    return null;
+    return "darkTheme";
   }
 }
 
@@ -51,7 +48,7 @@ ThemeData lightTheme = ThemeData.light().copyWith(
         iconTheme: ThemeData().iconTheme.copyWith(color: Colors.black),
       ),
   textTheme: ThemeData().textTheme.copyWith(
-        caption: ThemeData().textTheme.caption.copyWith(
+        caption: ThemeData().textTheme.caption?.copyWith(
               color: Colors.grey,
             ),
       ),

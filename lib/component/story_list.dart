@@ -15,8 +15,8 @@ import 'package:stingray/view_manager.dart';
 
 class StoryList extends HookConsumerWidget {
   const StoryList({
-    Key key,
-    @required this.ids,
+    Key? key,
+    required this.ids,
   }) : super(key: key);
 
   final List<int> ids;
@@ -25,29 +25,25 @@ class StoryList extends HookConsumerWidget {
     switch (type) {
       case ViewType.compactTile:
         return CompactTile(item: item);
-        break;
       case ViewType.itemCard:
         return ItemCard(item: item);
-        break;
       case ViewType.itemTile:
         return ItemTile(item: item);
-        break;
       default:
         return ItemCard(item: item);
-        break;
     }
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentView = ref.read<ViewType>(viewProvider);
+    final currentView = ref.watch<ViewType>(viewProvider);
 
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
           return Consumer(
             builder: (context, ref, child) {
-              return ref.read(storyProvider(ids[index])).when(
+              return ref.watch(storyProvider(ids[index])).when(
                     loading: () => LoadingItem(count: 1),
                     error: (err, trace) => Text("Error: $err"),
                     data: (item) {
@@ -67,7 +63,6 @@ class StoryList extends HookConsumerWidget {
                           dismissible: DismissiblePane(
                             onDismissed: () {
                               handleUpvote(context, item: item);
-                              return false;
                             },
                             dismissThreshold: 0.2,
                             closeOnCancel: true,

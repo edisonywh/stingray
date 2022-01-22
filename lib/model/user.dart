@@ -10,20 +10,20 @@ final usersProvider = FutureProvider.family((ref, String id) async {
 
 class User {
   User({
-    this.about,
-    this.created,
-    this.delay,
-    this.id,
-    this.karma,
-    this.submitted,
+    required this.about,
+    required this.created,
+    required this.delay,
+    required this.id,
+    required this.karma,
+    required this.submitted,
   });
 
-  String about;
-  int created;
-  int delay;
-  String id;
-  int karma;
-  List<int> submitted;
+  final String? about;
+  final int created;
+  final int delay;
+  final String id;
+  final int karma;
+  final List<int> submitted;
 
   factory User.fromJson(String str) => User.fromMap(json.decode(str));
 
@@ -42,19 +42,15 @@ class User {
         delay: json["delay"] == null ? null : json["delay"],
         id: json["id"] == null ? null : json["id"],
         karma: json["karma"] == null ? null : json["karma"],
-        submitted: json["submitted"] == null
-            ? null
-            : List<int>.from(json["submitted"].map((x) => x)),
+        submitted: List<int>.from(json["submitted"].map((x) => x)),
       );
 
   Map<String, dynamic> toMap() => {
-        "about": about == null ? null : about,
-        "created": created == null ? null : created,
-        "delay": delay == null ? null : delay,
-        "id": id == null ? null : id,
-        "karma": karma == null ? null : karma,
-        "submitted": submitted == null
-            ? null
-            : List<dynamic>.from(submitted.map((x) => x)),
+        "about": about,
+        "created": created,
+        "delay": delay,
+        "id": id,
+        "karma": karma,
+        "submitted": List<dynamic>.from(submitted.map((x) => x)),
       };
 }

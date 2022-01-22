@@ -7,12 +7,12 @@ enum Result {
 }
 
 class AuthResult {
-  String message;
-  Result result;
+  final String message;
+  final Result result;
 
   AuthResult({
-    this.message,
-    this.result,
+    required this.message,
+    required this.result,
   });
 }
 
@@ -27,25 +27,25 @@ class Auth {
   static Future<bool> isLoggedIn() async {
     final storage = new FlutterSecureStorage();
 
-    String username = await storage.read(key: "username");
+    String? username = await storage.read(key: "username");
     return username != null;
   }
 
-  static Future<String> currentUser() async {
+  static Future<String?> currentUser() async {
     final storage = new FlutterSecureStorage();
 
     return await storage.read(key: "username");
   }
 
-  static Future<AuthResult> vote({String itemId}) async {
+  static Future<AuthResult> vote({required String itemId}) async {
     final url = "$baseUrl/vote";
     if (!await isLoggedIn())
       return AuthResult(
           message: "You must be logged in to vote", result: Result.error);
 
     final storage = new FlutterSecureStorage();
-    String username = await storage.read(key: "username");
-    String password = await storage.read(key: "password");
+    String? username = await storage.read(key: "username");
+    String? password = await storage.read(key: "password");
 
     Map body = {
       "acct": username,
@@ -75,7 +75,8 @@ class Auth {
     return true;
   }
 
-  static Future<AuthResult> login({String username, String password}) async {
+  static Future<AuthResult> login(
+      {required String username, required String password}) async {
     final url = "$baseUrl/login";
 
     Map body = {

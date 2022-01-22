@@ -25,32 +25,32 @@ void main() async {
 
   SharedPreferences pref = await SharedPreferences.getInstance();
 
-  String themeName = pref.getString('theme');
+  String? themeName = pref.getString('theme');
   final theme = ThemeManager.fromThemeName(themeName);
 
-  String viewName = pref.getString('view');
+  String? viewName = pref.getString('view');
   final view = ViewManager.fromViewName(viewName);
 
   runApp(ProviderScope(child: App(theme: theme, view: view)));
 }
 
 class App extends HookConsumerWidget {
-  const App({@required this.theme, @required this.view});
+  const App({required this.theme, required this.view});
 
   final ThemeData theme;
   final ViewType view;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeManager = ref.watch<ThemeManager>(themeProvider.notifier);
-    final viewManager = ref.watch<ViewManager>(viewProvider.notifier);
+    final themeManager = ref.watch<ThemeManager>(themeProvider.originProvider);
+    final viewManager = ref.watch<ViewManager>(viewProvider.originProvider);
     useMemoized(() {
       // TODO: Right now this triggers a rebuild, so unfortunately you'll see a flash of default theme.
       themeManager.setTheme(theme);
       viewManager.setView(view);
     });
 
-    final currentTheme = ref.read<ThemeData>(themeProvider);
+    final currentTheme = ref.watch<ThemeData>(themeProvider);
 
     return MaterialApp(
       title: 'Stingray',

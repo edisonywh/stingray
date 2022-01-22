@@ -31,8 +31,8 @@ final FutureProvider jobStories = FutureProvider((ref) async {
 
 class IconTab {
   IconTab({
-    this.name,
-    this.icon,
+    required this.name,
+    required this.icon,
   });
 
   final String name;

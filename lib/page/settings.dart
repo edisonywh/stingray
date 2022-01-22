@@ -10,12 +10,12 @@ import 'package:stingray/view_manager.dart';
 class SettingsPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentView = ref.read(viewProvider);
+    final currentView = ref.watch(viewProvider);
     final ViewManager viewManager =
         ref.watch<ViewManager>(viewProvider.notifier);
     final currentTheme = ref.watch<ThemeData>(themeProvider);
     final ThemeManager themeManager =
-        ref.read<ThemeManager>(themeProvider.notifier);
+        ref.watch<ThemeManager>(themeProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -36,30 +36,30 @@ class SettingsPage extends HookConsumerWidget {
                     builder: (context, setState) => SimpleDialog(
                       title: Text("Theme"),
                       children: [
-                        RadioListTile(
+                        RadioListTile<ThemeData>(
                           title: const Text('Light'),
                           value: lightTheme,
                           groupValue: currentTheme,
                           onChanged: (value) {
-                            themeManager.setTheme(value);
+                            themeManager.setTheme(value!);
                             Navigator.pop(context);
                           },
                         ),
-                        RadioListTile(
+                        RadioListTile<ThemeData>(
                           title: const Text('Dark'),
                           value: darkTheme,
                           groupValue: currentTheme,
                           onChanged: (value) {
-                            themeManager.setTheme(value);
+                            themeManager.setTheme(value!);
                             Navigator.pop(context);
                           },
                         ),
-                        RadioListTile(
+                        RadioListTile<ThemeData>(
                           title: const Text('True Black'),
                           value: trueBlackTheme,
                           groupValue: currentTheme,
                           onChanged: (value) {
-                            themeManager.setTheme(value);
+                            themeManager.setTheme(value!);
                             Navigator.pop(context);
                           },
                         ),
@@ -78,30 +78,30 @@ class SettingsPage extends HookConsumerWidget {
                   return SimpleDialog(
                     title: Text("View"),
                     children: <Widget>[
-                      RadioListTile(
+                      RadioListTile<ViewType>(
                         title: const Text('Card'),
                         value: ViewType.itemCard,
                         groupValue: currentView,
                         onChanged: (value) {
-                          viewManager.setView(value);
+                          viewManager.setView(value!);
                           Navigator.pop(context);
                         },
                       ),
-                      RadioListTile(
+                      RadioListTile<ViewType>(
                         title: const Text('Compact'),
                         value: ViewType.compactTile,
                         groupValue: currentView,
                         onChanged: (value) {
-                          viewManager.setView(value);
+                          viewManager.setView(value!);
                           Navigator.pop(context);
                         },
                       ),
-                      RadioListTile(
+                      RadioListTile<ViewType>(
                         title: const Text('Tile'),
                         value: ViewType.itemTile,
                         groupValue: currentView,
                         onChanged: (value) {
-                          viewManager.setView(value);
+                          viewManager.setView(value!);
                           Navigator.pop(context);
                         },
                       ),
@@ -120,8 +120,7 @@ class SettingsPage extends HookConsumerWidget {
                   page = LoginPage();
                 } else {
                   var username = await Auth.currentUser();
-
-                  page = ProfilePage(username: username, isMe: true);
+                  page = ProfilePage(username: username!, isMe: true);
                 }
                 Navigator.push(
                   context,

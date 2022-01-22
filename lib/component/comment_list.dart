@@ -15,8 +15,8 @@ final commentsProvider = FutureProvider.family((ref, int id) async {
 
 class CommentList extends HookWidget {
   const CommentList({
-    Key key,
-    @required this.item,
+    Key? key,
+    required this.item,
   }) : super(key: key);
 
   final Item item;
@@ -24,15 +24,12 @@ class CommentList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     useMemoized(() => Repo.prefetchComments(item: item));
-
     final collapsed = useState(Set());
     final comments = useState([]);
-
-    Stream<Item> stream;
-
+    Stream<Item>? stream;
     useEffect(() {
       stream = Repo.lazyFetchComments(item: item);
-      final sub = stream.listen((Item comment) {
+      final sub = stream!.listen((Item comment) {
         Set result = Set.from(collapsed.value);
         if (collapsed.value.contains(comment.parent)) {
           result.add(comment.id);
@@ -91,7 +88,6 @@ class CommentList extends HookWidget {
                             dismissible: DismissiblePane(
                               onDismissed: () {
                                 handleUpvote(context, item: comment);
-                                return false;
                               },
                               dismissThreshold: 0.2,
                               closeOnCancel: true,

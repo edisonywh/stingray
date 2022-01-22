@@ -4,8 +4,8 @@ import 'package:stingray/model/item.dart';
 
 class CompactTile extends StatelessWidget {
   const CompactTile({
-    Key key,
-    @required this.item,
+    Key? key,
+    required this.item,
   }) : super(key: key);
 
   final Item item;
@@ -48,7 +48,7 @@ class CompactTile extends StatelessWidget {
                         ),
                         TextSpan(
                           text: "  ${item.score}p",
-                          style: Theme.of(context).textTheme.caption.copyWith(
+                          style: Theme.of(context).textTheme.caption?.copyWith(
                                 color: item.isVoted()
                                     ? Theme.of(context).primaryColor
                                     : Theme.of(context).iconTheme.color,

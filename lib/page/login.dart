@@ -29,7 +29,7 @@ class LoginPage extends HookWidget {
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if ((value ?? '').isEmpty) {
                     return "Username can't be empty";
                   }
                   return null;
@@ -53,7 +53,7 @@ class LoginPage extends HookWidget {
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if ((value ?? '').isEmpty) {
                     return "Password can't be empty";
                   }
                   return null;
@@ -73,7 +73,7 @@ class LoginPage extends HookWidget {
                           primary: Theme.of(context).primaryColor,
                         ),
                         onPressed: () async {
-                          if (_formKey.currentState.validate()) {
+                          if (_formKey.currentState?.validate() ?? false) {
                             submitting.value = true;
                             AuthResult result = await Auth.login(
                               username: username.value,

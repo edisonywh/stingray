@@ -15,8 +15,8 @@ final partsProvider = FutureProvider.family((ref, int id) async {
 
 class StoryInformation extends HookConsumerWidget {
   const StoryInformation({
-    Key key,
-    @required this.item,
+    Key? key,
+    required this.item,
   }) : super(key: key);
 
   final Item item;
@@ -49,7 +49,7 @@ class StoryInformation extends HookConsumerWidget {
                 child: Container(
                   child: Text(
                     item.title == "" ? "Comment" : item.title,
-                    style: Theme.of(context).textTheme.headline5.copyWith(
+                    style: Theme.of(context).textTheme.headline5?.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
                   ),
@@ -77,7 +77,7 @@ class StoryInformation extends HookConsumerWidget {
                   children: <TextSpan>[
                     TextSpan(
                       text: item.by,
-                      style: Theme.of(context).textTheme.caption.copyWith(
+                      style: Theme.of(context).textTheme.caption?.copyWith(
                             color: Theme.of(context).primaryColor,
                           ),
                     ),
@@ -128,7 +128,7 @@ class StoryInformation extends HookConsumerWidget {
                               "${item.score}",
                               textAlign: TextAlign.center,
                               style:
-                                  Theme.of(context).textTheme.caption.copyWith(
+                                  Theme.of(context).textTheme.caption?.copyWith(
                                         color: Theme.of(context).primaryColor,
                                       ),
                             ),

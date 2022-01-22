@@ -8,8 +8,8 @@ import 'package:stingray/repo.dart';
 
 class StoryPage extends HookWidget {
   const StoryPage({
-    Key key,
-    @required this.item,
+    Key? key,
+    required this.item,
   }) : super(key: key);
 
   final Item item;
@@ -24,7 +24,7 @@ class StoryPage extends HookWidget {
             IconButton(
               icon: Icon(Feather.corner_left_up),
               onPressed: () async {
-                Item parent = await Repo.fetchItem(item.parent);
+                Item parent = await Repo.fetchItem(item.parent!);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -48,14 +48,14 @@ class StoryPage extends HookWidget {
                     Icon(
                       Feather.anchor,
                       size: 50,
-                      color: Theme.of(context).textTheme.caption.color,
+                      color: Theme.of(context).textTheme.caption?.color,
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Text(
                         "This is the end!",
                         style: TextStyle(
-                          color: Theme.of(context).textTheme.caption.color,
+                          color: Theme.of(context).textTheme.caption?.color,
                           fontSize: 20,
                         ),
                       ),
