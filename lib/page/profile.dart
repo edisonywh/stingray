@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stingray/auth.dart';
 import 'package:stingray/component/story_list.dart';
 import 'package:stingray/model/user.dart';
 
-class ProfilePage extends HookWidget {
-  ProfilePage({this.username, this.isMe = false});
+class ProfilePage extends HookConsumerWidget {
+  ProfilePage({required this.username, this.isMe = false});
 
   final String username;
   final bool isMe;
 
   @override
-  Widget build(BuildContext context) {
-    AsyncValue<User> user = useProvider(usersProvider(username));
+  Widget build(BuildContext context, WidgetRef ref) {
+    AsyncValue<User> user = ref.watch(usersProvider(username));
 
     return Scaffold(
       appBar: AppBar(
@@ -32,16 +31,16 @@ class ProfilePage extends HookWidget {
                       title: Text("Log out"),
                       content: Text("Are you sure you want to log out?"),
                       actions: [
-                        FlatButton(
+                        TextButton(
                           onPressed: () => Navigator.pop(context),
                           child: Text(
                             "Cancel",
                             style: TextStyle(
-                              color: Theme.of(context).textTheme.caption.color,
+                              color: Theme.of(context).textTheme.caption?.color,
                             ),
                           ),
                         ),
-                        FlatButton(
+                        TextButton(
                           onPressed: () async {
                             await Auth.logout();
                             Navigator.pop(context);
@@ -82,7 +81,7 @@ class ProfilePage extends HookWidget {
                                 style: Theme.of(context)
                                     .textTheme
                                     .caption
-                                    .copyWith(
+                                    ?.copyWith(
                                       color: Theme.of(context).primaryColor,
                                     ),
                               ),

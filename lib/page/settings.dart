@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stingray/auth.dart';
 import 'package:stingray/page/login.dart';
@@ -8,13 +7,15 @@ import 'package:stingray/page/profile.dart';
 import 'package:stingray/theme.dart';
 import 'package:stingray/view_manager.dart';
 
-class SettingsPage extends HookWidget {
+class SettingsPage extends HookConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    final currentView = useProvider(viewProvider.state);
-    final ViewManager viewManager = useProvider(viewProvider);
-    final currentTheme = useProvider(themeProvider.state);
-    final ThemeManager themeManager = useProvider(themeProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentView = ref.watch(viewProvider);
+    final ViewManager viewManager =
+        ref.watch<ViewManager>(viewProvider.notifier);
+    final currentTheme = ref.watch<ThemeData>(themeProvider);
+    final ThemeManager themeManager =
+        ref.watch<ThemeManager>(themeProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -35,30 +36,30 @@ class SettingsPage extends HookWidget {
                     builder: (context, setState) => SimpleDialog(
                       title: Text("Theme"),
                       children: [
-                        RadioListTile(
+                        RadioListTile<ThemeData>(
                           title: const Text('Light'),
                           value: lightTheme,
                           groupValue: currentTheme,
                           onChanged: (value) {
-                            themeManager.setTheme(value);
+                            themeManager.setTheme(value!);
                             Navigator.pop(context);
                           },
                         ),
-                        RadioListTile(
+                        RadioListTile<ThemeData>(
                           title: const Text('Dark'),
                           value: darkTheme,
                           groupValue: currentTheme,
                           onChanged: (value) {
-                            themeManager.setTheme(value);
+                            themeManager.setTheme(value!);
                             Navigator.pop(context);
                           },
                         ),
-                        RadioListTile(
+                        RadioListTile<ThemeData>(
                           title: const Text('True Black'),
                           value: trueBlackTheme,
                           groupValue: currentTheme,
                           onChanged: (value) {
-                            themeManager.setTheme(value);
+                            themeManager.setTheme(value!);
                             Navigator.pop(context);
                           },
                         ),
@@ -77,30 +78,30 @@ class SettingsPage extends HookWidget {
                   return SimpleDialog(
                     title: Text("View"),
                     children: <Widget>[
-                      RadioListTile(
+                      RadioListTile<ViewType>(
                         title: const Text('Card'),
                         value: ViewType.itemCard,
                         groupValue: currentView,
                         onChanged: (value) {
-                          viewManager.setView(value);
+                          viewManager.setView(value!);
                           Navigator.pop(context);
                         },
                       ),
-                      RadioListTile(
+                      RadioListTile<ViewType>(
                         title: const Text('Compact'),
                         value: ViewType.compactTile,
                         groupValue: currentView,
                         onChanged: (value) {
-                          viewManager.setView(value);
+                          viewManager.setView(value!);
                           Navigator.pop(context);
                         },
                       ),
-                      RadioListTile(
+                      RadioListTile<ViewType>(
                         title: const Text('Tile'),
                         value: ViewType.itemTile,
                         groupValue: currentView,
                         onChanged: (value) {
-                          viewManager.setView(value);
+                          viewManager.setView(value!);
                           Navigator.pop(context);
                         },
                       ),
@@ -119,8 +120,7 @@ class SettingsPage extends HookWidget {
                   page = LoginPage();
                 } else {
                   var username = await Auth.currentUser();
-
-                  page = ProfilePage(username: username, isMe: true);
+                  page = ProfilePage(username: username!, isMe: true);
                 }
                 Navigator.push(
                   context,

@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:stingray/history.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -22,39 +23,39 @@ enum StoriesType {
 class Item {
   Item({
     this.depth = 0,
-    this.by,
-    this.deleted,
-    this.text,
-    this.dead,
-    this.poll,
-    this.parent,
-    this.parts,
-    this.descendants,
-    this.id,
-    this.kids,
-    this.score,
-    this.time,
-    this.title,
-    this.type,
-    this.url,
+    required this.by,
+    required this.deleted,
+    required this.text,
+    required this.dead,
+    required this.poll,
+    required this.parent,
+    required this.parts,
+    required this.descendants,
+    required this.id,
+    this.kids = const [],
+    required this.score,
+    required this.time,
+    required this.title,
+    required this.type,
+    required this.url,
   });
 
   int depth;
-  String by;
-  bool deleted;
-  String text;
-  bool dead;
-  int poll;
-  int parent;
-  List<int> parts;
-  int descendants;
-  int id;
-  List<int> kids;
-  int score;
-  int time;
-  String title;
-  StoryType type;
-  String url;
+  final String by;
+  final bool deleted;
+  final String? text;
+  final bool? dead;
+  final int? poll;
+  final int? parent;
+  final List<int> parts;
+  final int? descendants;
+  final int id;
+  final List<int> kids;
+  final int score;
+  final int time;
+  final String title;
+  final StoryType? type;
+  final String url;
 
   factory Item.fromJson(String str) => Item.fromMap(json.decode(str));
 
@@ -62,7 +63,7 @@ class Item {
 
   bool isVoted() => HistoryManager.isVoted(id);
 
-  String get domain => Uri.parse(url)?.host;
+  String get domain => url;
   String get ago =>
       timeago.format(DateTime.fromMillisecondsSinceEpoch(time * 1000));
 
@@ -90,42 +91,36 @@ class Item {
 
   Map<String, dynamic> toMap() => {
         "id": id,
-        "by": by == null ? null : by,
-        "deleted": deleted == null ? null : deleted,
+        "by": by,
+        "deleted": deleted,
         "text": text == null ? null : text,
         "dead": dead == null ? null : dead,
         "poll": poll == null ? null : poll,
-        "parent": parent == null ? null : parent,
-        "parts": parts == null ? null : List<dynamic>.from(parts.map((x) => x)),
+        "parent": parent,
+        "parts": List<dynamic>.from(parts.map((x) => x)),
         "descendants": descendants == null ? null : descendants,
-        "kids": kids == null ? null : List<dynamic>.from(kids.map((x) => x)),
-        "score": score == null ? null : score,
-        "time": time == null ? null : time,
-        "title": title == null ? null : title,
+        "kids": List<dynamic>.from(kids.map((x) => x)),
+        "score": score,
+        "time": time,
+        "title": title,
         "type": type == null ? null : type,
-        "url": url == null ? null : url,
+        "url": url,
       };
 
   static StoryType castType(String type) {
     switch (type) {
       case "job":
         return StoryType.job;
-        break;
       case "story":
         return StoryType.story;
-        break;
       case "comment":
         return StoryType.comment;
-        break;
       case "poll":
         return StoryType.poll;
-        break;
       case "pollopt":
         return StoryType.pollopt;
-        break;
       default:
-        return null;
-        break;
+        throw Exception("Unknown type: $type");
     }
   }
 }

@@ -29,7 +29,7 @@ class LoginPage extends HookWidget {
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if ((value ?? '').isEmpty) {
                     return "Username can't be empty";
                   }
                   return null;
@@ -53,7 +53,7 @@ class LoginPage extends HookWidget {
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if ((value ?? '').isEmpty) {
                     return "Password can't be empty";
                   }
                   return null;
@@ -68,10 +68,12 @@ class LoginPage extends HookWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Builder(
                     builder: (context) {
-                      return RaisedButton(
-                        color: Theme.of(context).primaryColor,
+                      return ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Theme.of(context).primaryColor,
+                        ),
                         onPressed: () async {
-                          if (_formKey.currentState.validate()) {
+                          if (_formKey.currentState?.validate() ?? false) {
                             submitting.value = true;
                             AuthResult result = await Auth.login(
                               username: username.value,
@@ -79,7 +81,7 @@ class LoginPage extends HookWidget {
                             );
 
                             if (result.result == Result.error) {
-                              Scaffold.of(context).showSnackBar(
+                              ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(result.message),
                                 ),

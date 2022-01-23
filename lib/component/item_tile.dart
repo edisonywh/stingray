@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:stingray/model/item.dart';
 
 class ItemTile extends StatelessWidget {
   const ItemTile({
-    Key key,
-    @required this.item,
+    Key? key,
+    required this.item,
   }) : super(key: key);
 
   final Item item;
@@ -61,9 +61,10 @@ class ItemTile extends StatelessWidget {
                           child: Text(
                             item.score.toString(),
                             textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.caption.copyWith(
-                                  color: Theme.of(context).primaryColor,
-                                ),
+                            style:
+                                Theme.of(context).textTheme.caption?.copyWith(
+                                      color: Theme.of(context).primaryColor,
+                                    ),
                           ),
                         ),
                       ],

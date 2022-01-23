@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stingray/component/loading_item.dart';
 import 'package:stingray/model/item.dart';
 
 class PartSnippet extends StatelessWidget {
   const PartSnippet({
-    Key key,
-    @required this.part,
+    Key? key,
+    required this.part,
   }) : super(key: key);
 
   final AsyncValue<Item> part;

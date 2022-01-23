@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stingray/component/comment_tile.dart';
@@ -15,8 +15,8 @@ final commentsProvider = FutureProvider.family((ref, int id) async {
 
 class CommentList extends HookWidget {
   const CommentList({
-    Key key,
-    @required this.item,
+    Key? key,
+    required this.item,
   }) : super(key: key);
 
   final Item item;
@@ -24,15 +24,12 @@ class CommentList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     useMemoized(() => Repo.prefetchComments(item: item));
-
     final collapsed = useState(Set());
     final comments = useState([]);
-
-    Stream<Item> stream;
-
+    Stream<Item>? stream;
     useEffect(() {
       stream = Repo.lazyFetchComments(item: item);
-      final sub = stream.listen((Item comment) {
+      final sub = stream!.listen((Item comment) {
         Set result = Set.from(collapsed.value);
         if (collapsed.value.contains(comment.parent)) {
           result.add(comment.id);
@@ -76,27 +73,25 @@ class CommentList extends HookWidget {
                       : Slidable(
                           key: Key(comment.id.toString()),
                           closeOnScroll: true,
-                          actionPane: SlidableScrollActionPane(),
-                          actions: <Widget>[
-                            IconSlideAction(
-                              color: Colors.deepOrangeAccent,
-                              icon: Feather.arrow_up_circle,
-                              onTap: () {
+                          startActionPane: ActionPane(
+                            motion: const DrawerMotion(),
+                            extentRatio: 0.25,
+                            children: [
+                              SlidableAction(
+                                backgroundColor: Colors.deepOrangeAccent,
+                                icon: Feather.arrow_up_circle,
+                                onPressed: (context) {
+                                  handleUpvote(context, item: comment);
+                                },
+                              ),
+                            ],
+                            dismissible: DismissiblePane(
+                              onDismissed: () {
                                 handleUpvote(context, item: comment);
                               },
+                              dismissThreshold: 0.2,
+                              closeOnCancel: true,
                             ),
-                          ],
-                          dismissal: SlidableDismissal(
-                            closeOnCanceled: true,
-                            dismissThresholds: {
-                              SlideActionType.primary: 0.2,
-                              SlideActionType.secondary: 0.2,
-                            },
-                            child: SlidableDrawerDismissal(),
-                            onWillDismiss: (actionType) {
-                              handleUpvote(context, item: comment);
-                              return false;
-                            },
                           ),
                           child: CommentTile(
                             comment: comments.value[index],

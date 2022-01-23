@@ -4,7 +4,7 @@ import 'package:shimmer/shimmer.dart';
 
 class LoadingItem extends HookWidget {
   const LoadingItem({
-    Key key,
+    Key? key,
     this.count = 10,
   }) : super(key: key);
 
@@ -24,8 +24,8 @@ class LoadingItem extends HookWidget {
           shrinkWrap: true,
           itemBuilder: (context, index) {
             return Shimmer.fromColors(
-              baseColor: Colors.grey[500],
-              highlightColor: Colors.grey[100],
+              baseColor: Colors.grey.shade500,
+              highlightColor: Colors.grey.shade100,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(

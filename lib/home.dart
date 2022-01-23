@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stingray/deeplink_handler.dart';
 import 'package:stingray/model/item.dart';
+import 'package:stingray/page/settings.dart';
 import 'package:stingray/page/stories_page.dart';
 import 'package:stingray/repo.dart';
-import 'package:stingray/page/settings.dart';
 
 final FutureProvider newStories = FutureProvider((ref) async {
   return await Repo.getStories(StoriesType.newStories);
@@ -31,8 +31,8 @@ final FutureProvider jobStories = FutureProvider((ref) async {
 
 class IconTab {
   IconTab({
-    this.name,
-    this.icon,
+    required this.name,
+    required this.icon,
   });
 
   final String name;

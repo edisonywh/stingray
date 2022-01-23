@@ -4,7 +4,8 @@ import 'package:stingray/auth.dart';
 import 'package:stingray/history.dart';
 import 'package:stingray/model/item.dart';
 
-void handleShare({int id, String title, String postUrl}) {
+void handleShare(
+    {required int id, required String title, required String postUrl}) {
   String hnUrl = buildHackerNewsURL(id);
 
   String text =
@@ -17,14 +18,15 @@ String buildHackerNewsURL(int id) {
   return "https://news.ycombinator.com/item?id=$id";
 }
 
-void handleUpvote(context, {Item item}) async {
+void handleUpvote(context, {required Item item}) async {
   HistoryManager.addToVoteCache(item.id);
   AuthResult result = await Auth.vote(itemId: "${item.id}");
 
   if (result.result == Result.error) {
     HistoryManager.removeFromVoteCache(
         item.id); // ToDO: The UI won't update when we remove from cache here.
-    Scaffold.of(context).showSnackBar(SnackBar(content: Text(result.message)));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(result.message)));
   } else if (result.result == Result.ok) {
     await HistoryManager.markAsVoted(item.id);
   }

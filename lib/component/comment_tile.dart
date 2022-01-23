@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:stingray/model/item.dart';
 import 'package:stingray/page/profile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CommentTile extends HookWidget {
   const CommentTile({
-    Key key,
-    @required this.comment,
-    @required this.author,
+    Key? key,
+    required this.comment,
+    required this.author,
     this.isCollapsed = false,
   }) : super(key: key);
 
@@ -45,7 +45,7 @@ class CommentTile extends HookWidget {
     if (comment.deleted) {
       return Text(
         "<deleted>",
-        style: Theme.of(context).textTheme.caption.copyWith(
+        style: Theme.of(context).textTheme.caption?.copyWith(
               fontStyle: FontStyle.italic,
             ),
       );
@@ -54,7 +54,7 @@ class CommentTile extends HookWidget {
     if (comment.by == author) {
       return Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).accentColor,
+          color: Theme.of(context).colorScheme.secondary,
           borderRadius: BorderRadius.circular(4),
         ),
         child: Padding(
@@ -63,7 +63,7 @@ class CommentTile extends HookWidget {
           ),
           child: Text(
             comment.by,
-            style: Theme.of(context).textTheme.caption.copyWith(
+            style: Theme.of(context).textTheme.caption?.copyWith(
                   color: Colors.black,
                   fontWeight: FontWeight.w600,
                 ),
@@ -74,7 +74,7 @@ class CommentTile extends HookWidget {
 
     return Text(
       comment.by,
-      style: Theme.of(context).textTheme.caption.copyWith(
+      style: Theme.of(context).textTheme.caption?.copyWith(
             fontWeight: FontWeight.w500,
           ),
     );
@@ -154,7 +154,7 @@ class CommentTile extends HookWidget {
                   if (isCollapsed && comment.kids.isNotEmpty)
                     Container(
                       decoration: BoxDecoration(
-                        color: Theme.of(context).accentColor,
+                        color: Theme.of(context).colorScheme.secondary,
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Padding(
@@ -163,7 +163,7 @@ class CommentTile extends HookWidget {
                         ),
                         child: Text(
                           "+${comment.kids.length}",
-                          style: Theme.of(context).textTheme.caption.copyWith(
+                          style: Theme.of(context).textTheme.caption?.copyWith(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -174,7 +174,7 @@ class CommentTile extends HookWidget {
               ),
               Html(
                 data: comment.text,
-                onLinkTap: (url) => launchUrl(url),
+                onLinkTap: (url, _, __, ___) => launchUrl(url),
               ),
             ],
           ),
