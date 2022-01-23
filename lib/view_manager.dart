@@ -7,7 +7,6 @@ enum ViewType {
   itemTile,
 }
 
-// ignore: top_level_function_literal_block
 final viewProvider = StateNotifierProvider<ViewManager, ViewType>((ref) {
   return ViewManager();
 });
